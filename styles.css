@@ -1,4 +1,4 @@
-* {
+*, *::after, *::before{
     margin: 0;
     padding: 0;
     box-sizing: border-box
@@ -14,7 +14,25 @@ body {
 
 h1 {
     font-size: 5vh;
+    margin: 2.5vh;
     font-family: 'Courier New', Courier, monospace;
     color: rgba(245, 245, 245, 0.829);
     font-weight: bold;
+}
+
+#board {
+    width: 70vmin;
+    height: 60vmin;
+    background-color: rgba(157, 104, 47, 0.688);
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+}
+
+.cell {
+    border: 1px dotted wheat
+}
+
+.piece {
+    
 }
