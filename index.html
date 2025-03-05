@@ -1,15 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Four In Line</title>
-    <link rel="icon" type="image/png" href="four-in-line.png">
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Four In Line</title>
+  <link href="styles.css" rel="stylesheet">
+  <link rel="icon" type="image/png" href="four-in-line.png">
 </head>
 <body style="background-image: url('BG_AV.png'); background-repeat: no-repeat; background-size: cover; background-position: center;">
-    <h1>Four In Line</h1>
-    <div id="board"></div>
-    <script src="main.js"></script>
+  <h1>Four In Line</h1>
+  <div id="board">
+  </div>
+  <div id="modal-container">
+    <div id="modal-content">
+      <h1 style="color: black;">Game Over</h1>
+      <p id="modal-message">The game is a draw</p>
+      <button id="reset">Play Again?</button>
+    </div>
+  </div>
+  <script src="main.js"></script>
 </body>
 </html>
