@@ -6,10 +6,59 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Four In Line</title>
   <link href="styles.css" rel="stylesheet">
-  <link rel="icon" type="image/png" href="four-in-line.png">
+  <link href="NewGame.css" rel="stylesheet">
+  <link rel="icon" type="image/png" href="/img/four-in-line.png">
 </head>
-<body style="background-image: url('BG_AV.png'); background-repeat: no-repeat; background-size: cover; background-position: center;">
+<body style="background-image: url('/img/BG_AV.png'); background-repeat: no-repeat; background-size: cover; background-position: center;">
   <h1>Four In Line</h1>
+
+  <div id="new-game-container">
+    <button id="new-game">New Game</button>
+    <div id="game-options" class="hidden">
+      <h2>Game Options</h2>
+      <label>Player 1 Color:
+        <select id="player1-color">
+          <option value="red">Red</option>
+          <option value="yellow">Yellow</option>
+        </select>
+      </label>
+      <br>
+      <label>Player 2:
+        <select id="player2-type">
+          <option value="human">Human</option>
+          <option value="ai">AI</option>
+        </select>
+      </label>
+      <br>
+      <label>Player 2 Color:
+        <select id="player2-color">
+          <option value="red">Red</option>
+          <option value="yellow">Yellow</option>
+        </select>
+      </label>
+      <br>
+      <label>Board Size:
+        <select id="board-size">
+          <option value="7x6">7x6</option>
+          <option value="8x7">8x7</option>
+          <option value="9x7">9x7</option>
+        </select>
+      </label>
+      <br>
+      <label>Board Background:
+        <select id="board-bg">
+          <option value="blue">Blue</option>
+          <option value="green">Green</option>
+          <option value="wood">Wood</option>
+        </select>
+      </label>
+      <br>
+      <button id="start-game">Play</button>
+      <button id="close-options">Close</button>
+    </div>
+  </div>
+  
+
   <div id="board">
   </div>
   <div id="modal-container">
@@ -20,5 +69,6 @@
     </div>
   </div>
   <script src="main.js"></script>
+  <script src="NewGame.js"></script>
 </body>
 </html>
