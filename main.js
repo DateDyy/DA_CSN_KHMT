@@ -197,8 +197,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // Kiểm tra chiến thắng của người chơi hiện tại
     if (hasPlayerWon(playerTurn)) {
       modalContainer.style.display = "block";
+      const winnerColor =
+        playerTurn === RED_TURN
+          ? player1ColorSelect.value
+          : player2ColorSelect.value;
       modalMessage.textContent = `${
-        playerTurn === RED_TURN ? "Red" : "Yellow"
+        winnerColor.charAt(0).toUpperCase() + winnerColor.slice(1)
       } WON!`;
       modalMessage.dataset.winner = playerTurn;
     }
