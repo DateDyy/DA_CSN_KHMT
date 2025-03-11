@@ -3,6 +3,8 @@ const modalContainer = document.querySelector("#modal-container");
 const modalMessage = document.querySelector("#modal-message");
 const resetButton = document.querySelector("#reset");
 const boardSizeSelect = document.querySelector("#board-size");
+const player1Color = document.querySelector("#player1-color");
+const player2Color = document.querySelector("#player2-color");
 
 resetButton.onclick = () => {
   location.reload();
@@ -20,17 +22,49 @@ let playerTurn = RED_TURN; // 1 - red, 2 - yellow
 let hoverColumn = -1;
 let animating = false;
 
+// Hàm chọn màu cho người chơi 1 và 2
+let isUpdate = false;
+
+player1Color.onchange = () => {
+  if (isUpdate) return;
+  const color1 = player1Color.value;
+  const color2 = player2Color.value;
+
+  // Nếu người chơi 2 đang chọn màu trùng với người chơi 1 thì tự động chuyển sang option màu khác
+  if (color2 === color1) {
+    isUpdate = true;
+    for (let option of player2Color.options) {
+      if (option.value !== color1) {
+        player2Color.value = option.value;
+        break;
+      }
+    }
+    isUpdate = false;
+  }
+};
+
+player2Color.onchange = () => {
+  if (isUpdate) return;
+  const color1 = player1Color.value;
+  const color2 = player2Color.value;
+
+  // Nếu người chơi 1 đang chọn màu trùng với người chơi 2 thì tự động chuyển sang option màu khác
+  if (color1 === color2) {
+    isUpdate = true;
+    for (let option of player1Color.options) {
+      if (option.value !== color2) {
+        player1Color.value = option.value;
+        break;
+      }
+    }
+    isUpdate = false;
+  }
+};
+
 // Hàm khởi tạo lại board theo kích thước mới
 function initializeBoard() {
-  // // Xóa nội dung board hiện tại
-  // board.innerHTML = "";
   // Khởi tạo mảng pieces với số phần tử = boardWidth * boardHeight, tất cả đều bằng 0
   pieces = new Array(boardWidth * boardHeight).fill(0);
-
-  // // Reset trạng thái game
-  // playerTurn = RED_TURN;
-  // hoverColumn = -1;
-  // animating = false;
 
   // Tạo các ô trên board
   for (let i = 0; i < boardWidth * boardHeight; i++) {
@@ -39,11 +73,12 @@ function initializeBoard() {
     board.appendChild(cell);
 
     // Xác định cột của ô hiện tại
-    let col = i % boardWidth;
-    cell.onmouseenter = () => onMouseEnteredColumn(col);
+    cell.onmouseenter = () => {
+      onMouseEnteredColumn(i % boardWidth);
+    };
     cell.onclick = () => {
       if (!animating) {
-        onColumnClicked(col);
+        onColumnClicked(i % boardWidth);
       }
     };
   }
@@ -58,6 +93,8 @@ if (boardSizeSelect && board) {
     boardHeight = h;
     board.style.setProperty("--width", `${w * 10}vmin`);
     board.style.setProperty("--height", `${h * 10}vmin`);
+    board.style.gridTemplateColumns = `repeat(${w}, 1fr)`;
+    board.style.gridTemplateRows = `repeat(${h}, 1fr)`;
     initializeBoard();
   } else {
     console.error("Invalid board size:", boardSize);
@@ -70,8 +107,10 @@ if (boardSizeSelect && board) {
     if (!isNaN(w) && !isNaN(h)) {
       boardWidth = w;
       boardHeight = h;
-      board.style.setProperty("--width", `${w * 10}vmin`);
-      board.style.setProperty("--height", `${h * 10}vmin`);
+      board.style.setProperty("--width", `${w * 10}vmin`); // Row
+      board.style.setProperty("--height", `${h * 10}vmin`); // Column
+      board.style.gridTemplateColumns = `repeat(${w}, 1fr)`;
+      board.style.gridTemplateRows = `repeat(${h}, 1fr)`;
       initializeBoard();
     } else {
       console.error("Invalid board size:", boardSize);
@@ -83,15 +122,10 @@ if (boardSizeSelect && board) {
 
 function onColumnClicked(column) {
   // Tìm hàng trống ở cột được chọn, từ dưới lên trên
-  let availableRow = -1;
-  for (let row = boardHeight - 1; row >= 0; row--) {
-    if (pieces[row * boardWidth + column] === 0) {
-      availableRow = row;
-      break;
-    }
-  }
+  let availableRow = pieces
+    .filter((_, index) => index % boardWidth === column)
+    .lastIndexOf(0);
   if (availableRow === -1) {
-    // Cột đã đầy
     return;
   }
 
@@ -106,30 +140,26 @@ function onColumnClicked(column) {
 
   // Xử lý animation nếu có phần tử "unplaced" (hiệu ứng khi hover)
   let unplacedPiece = document.querySelector("[data-placed='false']");
-  if (unplacedPiece) {
-    let unplacedY = unplacedPiece.getBoundingClientRect().y;
-    let placedY = piece.getBoundingClientRect().y;
-    let yDiff = unplacedY - placedY;
+  let unplacedY = unplacedPiece.getBoundingClientRect().y;
+  let placedY = piece.getBoundingClientRect().y;
+  let yDiff = unplacedY - placedY;
 
-    animating = true;
-    removeUnplacedPiece();
-    let animation = piece.animate(
-      [
-        { transform: `translateY(${yDiff}px)`, offset: 0 },
-        { transform: `translateY(0px)`, offset: 0.6 },
-        { transform: `translateY(${yDiff / 20}px)`, offset: 0.8 },
-        { transform: `translateY(0px)`, offset: 0.95 },
-      ],
-      {
-        duration: 400,
-        easing: "linear",
-        iterations: 1,
-      }
-    );
-    animation.addEventListener("finish", checkGameWinOrDraw);
-  } else {
-    checkGameWinOrDraw();
-  }
+  animating = true;
+  removeUnplacedPiece();
+  let animation = piece.animate(
+    [
+      { transform: `translateY(${yDiff}px)`, offset: 0 },
+      { transform: `translateY(0px)`, offset: 0.6 },
+      { transform: `translateY(${yDiff / 20}px)`, offset: 0.8 },
+      { transform: `translateY(0px)`, offset: 0.95 },
+    ],
+    {
+      duration: 400,
+      easing: "linear",
+      iterations: 1,
+    }
+  );
+  animation.addEventListener("finish", checkGameWinOrDraw);
 }
 
 function checkGameWinOrDraw() {
@@ -149,7 +179,6 @@ function checkGameWinOrDraw() {
       playerTurn === RED_TURN ? "Red" : "Yellow"
     } WON!`;
     modalMessage.dataset.winner = playerTurn;
-    return;
   }
 
   // Chuyển lượt chơi
@@ -160,7 +189,7 @@ function checkGameWinOrDraw() {
 function updateHover() {
   removeUnplacedPiece();
   // Hiển thị quân "hover" ở ô đầu tiên của cột (giả sử board được xếp theo hàng từ trên xuống)
-  if (hoverColumn >= 0 && pieces[hoverColumn] === 0) {
+  if (pieces[hoverColumn] === 0) {
     let cell = board.children[hoverColumn];
     let piece = document.createElement("div");
     piece.className = "piece";
@@ -184,7 +213,7 @@ function onMouseEnteredColumn(column) {
   }
 }
 
-function hasPlayerWon(player) {
+function hasPlayerWon(player, pieces = pieces) {
   // Duyệt qua tất cả các ô để kiểm tra 4 quân liên tiếp theo 4 hướng:
   // ngang, dọc, chéo xuống phải và chéo xuống trái.
   for (let row = 0; row < boardHeight; row++) {
