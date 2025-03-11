@@ -43,15 +43,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     switch (boardBg) {
       case "blue":
-        backgroundImage = "url('/img/NT_AN.jpg')";
+        backgroundImage = "url('/img/BG_Blue.jpg')";
         boardColor = "rgb(23, 28, 158)"; // Xanh dương
         break;
       case "green":
-        backgroundImage = "url('/img/CN_HC.jpg')";
+        backgroundImage = "url('/img/BG_Green.jpg')";
         boardColor = "rgb(44, 80, 32)"; // Xanh lá
         break;
       case "wood":
-        backgroundImage = "url('/img/BG_AV.png')";
+        backgroundImage = "url('/img/BG_Wood.png')";
         boardColor = "rgb(248, 114, 26)"; // Màu gỗ
         break;
       default:
