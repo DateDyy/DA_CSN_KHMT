@@ -32,15 +32,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   startGameButton.addEventListener("click", () => {
     closeOptions();
-
+  
     // Lấy giá trị từ các tùy chọn
     const boardSize = document.querySelector("#board-size").value;
     const boardBg = document.querySelector("#board-bg").value;
-
+    const aiDifficulty = document.querySelector("#ai-difficulty").value; // Lấy mức độ AI
+  
+    // Lưu mức độ AI vào localStorage để sử dụng trong game
+    localStorage.setItem("aiDifficulty", aiDifficulty);
+  
+    console.log("Selected AI Difficulty:", aiDifficulty); // Kiểm tra trên console
+  
     // Thiết lập hình nền trang web & màu bàn cờ dựa theo tùy chọn
     let backgroundImage = "";
     let boardColor = "";
-
+  
     switch (boardBg) {
       case "blue":
         backgroundImage = "url('/img/BG_Blue.jpg')";
@@ -57,17 +63,17 @@ document.addEventListener("DOMContentLoaded", () => {
       default:
         break;
     }
-
+  
     // Cập nhật nền trang web
     body.style.backgroundImage = backgroundImage;
     body.style.backgroundSize = "cover";
     body.style.backgroundPosition = "center";
     body.style.backgroundRepeat = "no-repeat";
-
-    // Cập nhật màu bàn cờ thông qua biến CSS trên board (các ô sẽ kế thừa)
+  
+    // Cập nhật màu bàn cờ
     board.style.setProperty("--boardColor", boardColor);
-
-    // Cập nhật kích thước bàn cờ dựa theo boardSize (ví dụ "7x6")
+  
+    // Cập nhật kích thước bàn cờ dựa theo boardSize
     const [columns, rows] = boardSize.split("x").map(Number);
     board.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
     board.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
