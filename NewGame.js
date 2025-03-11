@@ -1,65 +1,75 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const newGameButton = document.querySelector("#new-game");
-    const gameOptions = document.querySelector("#game-options");
-    const startGameButton = document.querySelector("#start-game");
-    const closeOptionsButton = document.querySelector("#close-options");
-    const board = document.querySelector("#board");
-    const body = document.body;
-    const overlay = document.createElement("div"); // Tạo overlay
-    overlay.id = "overlay";
-    document.body.appendChild(overlay); // Thêm overlay vào DOM
+  const newGameButton = document.querySelector("#new-game");
+  const gameOptions = document.querySelector("#game-options");
+  const startGameButton = document.querySelector("#start-game");
+  const closeOptionsButton = document.querySelector("#close-options");
+  const board = document.querySelector("#board");
+  const body = document.body;
 
-    // Mở bảng tùy chọn và làm mờ nền
-    newGameButton.onclick = () => {
-        gameOptions.style.display = "block";
-        overlay.style.display = "block"; // Hiển thị overlay
-        board.classList.add("disabled");
-    };
+  // Tạo overlay và thêm vào DOM
+  const overlay = document.createElement("div");
+  overlay.id = "overlay";
+  document.body.appendChild(overlay);
 
-    // Đóng bảng tùy chọn và khôi phục nền
-    function closeOptions() {
-        gameOptions.style.display = "none";
-        overlay.style.display = "none"; // Ẩn overlay
-        board.classList.remove("disabled");
+  // Hàm mở bảng tùy chọn
+  const openOptions = () => {
+    gameOptions.classList.add("active");
+    overlay.classList.add("active");
+    board.classList.add("disabled");
+  };
+
+  // Hàm đóng bảng tùy chọn
+  const closeOptions = () => {
+    gameOptions.classList.remove("active");
+    overlay.classList.remove("active");
+    board.classList.remove("disabled");
+  };
+
+  newGameButton.addEventListener("click", openOptions);
+  closeOptionsButton.addEventListener("click", closeOptions);
+  // Đóng modal khi click vào overlay
+  overlay.addEventListener("click", closeOptions);
+
+  startGameButton.addEventListener("click", () => {
+    closeOptions();
+
+    // Lấy giá trị từ các tùy chọn
+    const boardSize = document.querySelector("#board-size").value;
+    const boardBg = document.querySelector("#board-bg").value;
+
+    // Thiết lập hình nền trang web & màu bàn cờ dựa theo tùy chọn
+    let backgroundImage = "";
+    let boardColor = "";
+
+    switch (boardBg) {
+      case "blue":
+        backgroundImage = "url('/img/NT_AN.jpg')";
+        boardColor = "rgb(23, 28, 158)"; // Xanh dương
+        break;
+      case "green":
+        backgroundImage = "url('/img/CN_HC.jpg')";
+        boardColor = "rgb(44, 80, 32)"; // Xanh lá
+        break;
+      case "wood":
+        backgroundImage = "url('/img/BG_AV.png')";
+        boardColor = "rgb(248, 114, 26)"; // Màu gỗ
+        break;
+      default:
+        break;
     }
 
-    closeOptionsButton.onclick = closeOptions;
-    startGameButton.onclick = () => {
-        closeOptions();
+    // Cập nhật nền trang web
+    body.style.backgroundImage = backgroundImage;
+    body.style.backgroundSize = "cover";
+    body.style.backgroundPosition = "center";
+    body.style.backgroundRepeat = "no-repeat";
 
-        // Lấy giá trị từ các tùy chọn
-        const boardSize = document.querySelector("#board-size").value;
-        const boardBg = document.querySelector("#board-bg").value;
+    // Cập nhật màu bàn cờ thông qua biến CSS trên board (các ô sẽ kế thừa)
+    board.style.setProperty("--boardColor", boardColor);
 
-        // Thiết lập hình nền trang web & thay đổi màu bàn cờ
-        let backgroundImage = "";
-        let boardColor = "";
-
-        if (boardBg === "blue") {
-            backgroundImage = "url('/img/NT_AN.jpg')";
-            boardColor = "rgb(23, 126, 158)"; // Xanh dương
-        } else if (boardBg === "green") {
-            backgroundImage = "url('/img/CN_HC.jpg')";
-            boardColor = "rgb(112, 154, 98)"; // Xanh lá
-        } else if (boardBg === "wood") {
-            backgroundImage = "url('/img/BG_AV.png')";
-            boardColor = "rgb(248, 114, 26)"; // Màu gỗ
-        }
-
-        // Cập nhật nền trang web
-        body.style.backgroundImage = backgroundImage;
-        body.style.backgroundSize = "cover";
-        body.style.backgroundPosition = "center";
-        body.style.backgroundRepeat = "no-repeat";
-
-        // Cập nhật màu bàn cờ
-        document.querySelectorAll(".cell").forEach(cell => {
-            cell.style.setProperty("--boardColor", boardColor);
-        });
-
-        // Cập nhật kích thước bàn cờ
-        const [columns, rows] = boardSize.split("x").map(Number);
-        board.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
-        board.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
-    };
+    // Cập nhật kích thước bàn cờ dựa theo boardSize (ví dụ "7x6")
+    const [columns, rows] = boardSize.split("x").map(Number);
+    board.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+    board.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+  });
 });
