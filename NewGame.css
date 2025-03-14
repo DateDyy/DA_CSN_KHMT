@@ -2,6 +2,8 @@
 #new-game-container {
   text-align: center;
   margin-bottom: 20px;
+  font-family: Roboto, sans-serif;
+  font-weight: bold;
 }
 
 /* Nút New Game */
@@ -58,6 +60,9 @@
   text-align: center;
   width: 90%;
   max-width: 400px;
+  /* Giới hạn chiều cao và cho phép cuộn khi nội dung vượt quá */
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
 /* Khi cửa sổ Game Options được kích hoạt */
@@ -83,6 +88,9 @@
   color: #555;
 }
 
+#game-options select#computer-difficulty {
+  width: 40%;
+}
 #game-options select {
   width: 50%;
   padding: 8px;
@@ -143,13 +151,45 @@
   opacity: 0.3;
 }
 
-#ai-difficulty {
-  width: 100%;
-  padding: 8px;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #fafafa;
+/* Responsive styles cho modal Game Options */
+@media (max-width: 600px) {
+  #game-options {
+    width: 75%; /* Chiếm 80% chiều rộng màn hình */
+    max-width: 80%; /* Loại bỏ giới hạn max-width cứng */
+    padding: 15px; /* Giảm padding để tiết kiệm không gian */
+    max-height: 90vh; /* Giới hạn chiều cao không vượt quá 90% của viewport */
+    overflow-y: auto; /* Xuất hiện thanh cuộn nếu cần */
+  }
+
+  #game-options h2 {
+    font-size: 1.3rem;
+  }
+
+  #game-options label {
+    font-size: 0.9rem;
+  }
+
+  #game-options select#computer-difficulty {
+    width: 90%; /* Chiếm toàn bộ chiều rộng container */
+  }
+
+  #game-options select {
+    width: 90%; /* Chiếm toàn bộ chiều rộng container */
+
+    padding: 6px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    font-size: 0.9rem;
+  }
+
+  /* Chuyển các nút hành động hiển thị theo cột trên điện thoại */
+  #game-options .form-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  #game-options button {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
 }
