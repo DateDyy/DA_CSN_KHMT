@@ -1,0 +1,194 @@
+/* Container cho nút New Game */
+#new-game-container {
+  text-align: center;
+  margin-bottom: 20px;
+  font-family: Roboto, sans-serif;
+  font-weight: bold;
+}
+
+/* Nút New Game */
+#new-game {
+  background-color: #ff5722;
+  color: #fff;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+#new-game:hover {
+  background-color: #e64a19;
+}
+
+/* Overlay làm mờ nền khi hiển thị Game Options */
+#overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 5;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+}
+
+/* Khi overlay được kích hoạt */
+#overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Cửa sổ Game Options hiển thị ở giữa màn hình */
+#game-options {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  text-align: center;
+  width: 90%;
+  max-width: 400px;
+  /* Giới hạn chiều cao và cho phép cuộn khi nội dung vượt quá */
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* Khi cửa sổ Game Options được kích hoạt */
+#game-options.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Tiêu đề của modal */
+#game-options h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+/* Các label và select bên trong modal */
+#game-options label {
+  display: block;
+  margin-bottom: 5px;
+  text-align: left;
+  font-size: 1rem;
+  color: #555;
+}
+
+#game-options select#computer-difficulty {
+  width: 40%;
+}
+#game-options select {
+  width: 50%;
+  padding: 8px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fafafa;
+  appearance: none;
+  background-image: url('data:image/svg+xml;charset=UTF-8,<svg width="12" height="8" viewBox="0 0 12 8" xmlns="http://www.w3.org/2000/svg"><path d="M6 8L0 0h12L6 8z" fill="%23555"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px 8px;
+}
+
+/* Container cho các nút hành động bên trong modal */
+#game-options .form-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* Kiểu cho các nút trong modal */
+#game-options button {
+  flex: 1;
+  padding: 10px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Nút Play */
+#start-game {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+#start-game:hover {
+  background-color: #43a047;
+}
+
+/* Nút Close */
+#close-options {
+  background-color: #f44336;
+  color: #fff;
+}
+
+#close-options:hover {
+  background-color: #e53935;
+}
+
+/* Khi hiển thị Game Options, vô hiệu hóa thao tác trên board */
+#board.disabled {
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+/* Responsive styles cho modal Game Options */
+@media (max-width: 600px) {
+  #game-options {
+    width: 75%; /* Chiếm 80% chiều rộng màn hình */
+    max-width: 80%; /* Loại bỏ giới hạn max-width cứng */
+    padding: 15px; /* Giảm padding để tiết kiệm không gian */
+    max-height: 90vh; /* Giới hạn chiều cao không vượt quá 90% của viewport */
+    overflow-y: auto; /* Xuất hiện thanh cuộn nếu cần */
+  }
+
+  #game-options h2 {
+    font-size: 1.3rem;
+  }
+
+  #game-options label {
+    font-size: 0.9rem;
+  }
+
+  #game-options select#computer-difficulty {
+    width: 90%; /* Chiếm toàn bộ chiều rộng container */
+  }
+
+  #game-options select {
+    width: 90%; /* Chiếm toàn bộ chiều rộng container */
+
+    padding: 6px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    font-size: 0.9rem;
+  }
+  /* Chuyển các nút hành động hiển thị theo cột trên điện thoại */
+  #game-options .form-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  #game-options button {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+}
