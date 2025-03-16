@@ -51,7 +51,7 @@ body {
 
 #turn-message {
   font-size: 16px;
-  font-weight: bold !important;   
+  font-weight: bold !important;
 }
 
 h1 {
@@ -165,4 +165,99 @@ h1 {
   padding: 2.5vmin;
   background-color: rgba(220, 27, 9, 0.653);
   font-weight: bold;
+}
+
+@media only screen and (max-width: 600px) {
+  /* Điều chỉnh body cho mobile: căn lề trên thay vì căn giữa */
+  body {
+    justify-content: flex-start;
+    padding-top: 20px;
+  }
+
+  /* Thay đổi kích thước và vị trí của tiêu đề */
+  h1 {
+    order: 1;
+    margin-top: 30px;
+    font-size: 4vh;
+    text-align: center;
+    width: 100%;
+    padding-left: 10px;
+  }
+
+  /* Đưa nút New Game lên trên thông báo lượt chơi */
+  #new-game-container {
+    order: 2;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 0 10px;
+  }
+
+  /* Đặt thông báo lượt chơi bên dưới nút New Game */
+  #turn-notification {
+    order: 3;
+    width: 45%;
+    margin-top: 10px;
+    text-align: center;
+    position: relative;
+    left: 0;
+    top: 0;
+    transform: none;
+    padding-left: 10px;
+    margin-bottom: 10px;
+  }
+  .player-indicator {
+    width: 20px;
+    height: 20px;
+  }
+  #turn-message {
+    font-size: 14px;
+    text-align: center;
+  }
+
+  /* Giữ thứ tự của board */
+  #board {
+    order: 4;
+  }
+
+  /* Responsive cho Game Options */
+  #game-options {
+    width: 75%;
+    max-width: 80%;
+    padding: 15px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  #modal-content {
+    display: flex;
+    flex-direction: column; /* Xếp các phần tử theo chiều dọc */
+    align-items: center;
+    justify-content: center;
+    gap: 15px; /* Tạo khoảng cách giữa các phần tử */
+  }
+
+  /* Đảm bảo thứ tự mong muốn cho từng phần tử */
+  #modal-content h1 {
+    order: 1; /* Tiêu đề ở trên cùng */
+    font-size: 4vh; /* Điều chỉnh kích thước chữ */
+    margin-bottom: 10px;
+  }
+
+  #modal-message {
+    order: 2; /* Nội dung thông báo ở giữa */
+    font-size: 3.5vh;
+    text-align: center;
+  }
+
+  #reset {
+    order: 3; /* Nút reset ở dưới cùng */
+    font-size: 3vh;
+    padding: 10px 20px;
+    background-color: rgba(220, 27, 9, 0.8);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
 }
