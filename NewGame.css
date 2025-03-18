@@ -181,7 +181,6 @@
     margin-bottom: 4px;
     font-size: 0.9rem;
   }
-
   /* Chuyển các nút hành động hiển thị theo cột trên điện thoại */
   #game-options .form-actions {
     flex-direction: column;

@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const player1ColorSelect = document.querySelector("#player1-color");
   const player2ColorSelect = document.querySelector("#player2-color");
 
-  // Kích thước board mặc định (số cột x số hàng)
+  // Số cột và hàng mặc định của board
   let boardWidth = 7;
   let boardHeight = 6;
 
@@ -21,8 +21,8 @@ document.addEventListener("DOMContentLoaded", () => {
   let hoverColumn = -1;
   let animating = false;
 
-  // Hàm cấu hình kích thước board và khởi tạo lại board
-  // Ở đây thay vì thay đổi kích thước tổng của board, chúng ta cập nhật số cột và số hàng qua biến CSS
+  // Cấu hình kích thước board dựa theo số cột và số hàng được chọn,
+  // cập nhật các biến CSS để board tự động điều chỉnh grid
   const setBoardDimensions = (sizeStr) => {
     const [w, h] = sizeStr.split("x").map(Number);
     if (isNaN(w) || isNaN(h)) {
@@ -32,11 +32,11 @@ document.addEventListener("DOMContentLoaded", () => {
     boardWidth = w;
     boardHeight = h;
 
-    // Cập nhật biến CSS cho số cột và số hàng (đặt trên :root)
+    // Cập nhật biến CSS cho số cột và hàng
     document.documentElement.style.setProperty("--board-cols", w);
     document.documentElement.style.setProperty("--board-rows", h);
 
-    // Cập nhật cấu trúc grid: sử dụng 'auto' để mỗi ô giữ kích thước cố định (theo CSS, ví dụ --cell-size)
+    // Cập nhật cấu trúc grid cho board (sử dụng 'auto' để giữ kích thước ô cố định)
     board.style.gridTemplateColumns = `repeat(${w}, auto)`;
     board.style.gridTemplateRows = `repeat(${h}, auto)`;
 
@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initializeBoard();
   });
 
-  // Hàm khởi tạo lại board: reset mảng pieces và tạo cell mới
+  // Khởi tạo lại board: reset trạng thái, mảng pieces và tạo các ô mới
   window.initializeBoard = () => {
     board.innerHTML = "";
     pieces = new Array(boardWidth * boardHeight).fill(0);
@@ -67,22 +67,43 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!animating) onColumnClicked(col);
       });
     }
+    updateTurnNotification();
   };
 
-  // Tìm hàng trống cuối cùng (từ dưới lên) trong cột đã chọn
+  // Cập nhật thông báo lượt chơi
+  const updateTurnNotification = () => {
+    const turnMessage = document.getElementById("turn-message");
+    const playerIndicator = document.querySelector(".player-indicator");
+    if (!turnMessage || !playerIndicator) return;
+
+    const isPlayer1 = playerTurn === FIRST_TURN;
+    const playerNum = isPlayer1 ? "1" : "2";
+
+    playerIndicator.style.backgroundColor = `var(--player${playerNum}-color, ${
+      playerNum === "1" ? "red" : "yellow"
+    })`;
+
+    // Fix: Use the CSS variable for text color
+    turnMessage.style.color = `var(--player${playerNum}-color, ${
+      playerNum === "1" ? "red" : "yellow"
+    })`;
+    turnMessage.textContent = `Player ${playerNum}'s turn`;
+  };
+
+  // Tìm hàng trống cuối cùng (từ dưới lên) trong cột được chọn
   const getAvailableRowInColumn = (column) => {
     for (let row = boardHeight - 1; row >= 0; row--) {
-      if (pieces[row * boardWidth + column] === 0) {
-        return row;
-      }
+      if (pieces[row * boardWidth + column] === 0) return row;
     }
     return -1;
   };
 
+  // Xử lý khi click vào cột
   const onColumnClicked = (column) => {
     const availableRow = getAvailableRowInColumn(column);
     if (availableRow === -1) return; // Cột đầy
 
+    // Đánh dấu nước đi trong mảng pieces
     pieces[availableRow * boardWidth + column] = playerTurn;
     const cell = board.children[availableRow * boardWidth + column];
     const piece = document.createElement("div");
@@ -91,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
     piece.dataset.player = playerTurn;
     cell.appendChild(piece);
 
-    // Xử lý animation: tính khoảng cách rơi dựa trên vị trí quân cờ hover (nếu có)
+    // Xử lý animation nếu có quân cờ hover chưa đặt
     const unplacedPiece = document.querySelector("[data-placed='false']");
     if (!unplacedPiece) {
       checkGameWinOrDraw();
@@ -120,32 +141,34 @@ document.addEventListener("DOMContentLoaded", () => {
     animation.addEventListener("finish", checkGameWinOrDraw);
   };
 
+  // Kiểm tra thắng/hòa và chuyển lượt chơi
   const checkGameWinOrDraw = () => {
     animating = false;
-    // Kiểm tra hòa: không còn ô trống nào
+    // Hòa nếu không còn ô trống nào
     if (!pieces.includes(0)) {
       modalContainer.style.display = "block";
       modalMessage.textContent = "Draw";
       return;
     }
-    // Kiểm tra chiến thắng của người chơi hiện tại
+    // Kiểm tra chiến thắng
     if (hasPlayerWon(playerTurn)) {
       modalContainer.style.display = "block";
       const winnerColor =
         playerTurn === FIRST_TURN
           ? player1ColorSelect.value
           : player2ColorSelect.value;
-      modalMessage.textContent =
-        winnerColor.charAt(0).toUpperCase() + winnerColor.slice(1) + " WON!";
+      modalMessage.textContent = `Player ${playerTurn} WON!`;
+      modalMessage.style.color = winnerColor;
       modalMessage.dataset.winner = playerTurn;
       return;
     }
-    // Chuyển lượt và cập nhật quân hover
+    // Chuyển lượt
     playerTurn = playerTurn === FIRST_TURN ? SECOND_TURN : FIRST_TURN;
+    updateTurnNotification();
     updateHover();
   };
 
-  // Cập nhật quân hover trên ô đầu tiên của cột đang di chuột (nếu có ô trống)
+  // Cập nhật quân hover ở ô đầu tiên của cột đang di chuột
   const updateHover = () => {
     removeUnplacedPiece();
     if (hoverColumn >= 0 && pieces[hoverColumn] === 0) {
@@ -158,19 +181,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  // Loại bỏ quân hover chưa đặt
   const removeUnplacedPiece = () => {
     const unplacedPiece = document.querySelector("[data-placed='false']");
-    if (unplacedPiece && unplacedPiece.parentElement) {
-      unplacedPiece.parentElement.removeChild(unplacedPiece);
-    }
+    unplacedPiece?.parentElement?.removeChild(unplacedPiece);
   };
 
+  // Khi chuột di chuyển vào cột, cập nhật hover
   const onMouseEnteredColumn = (column) => {
     hoverColumn = column;
     if (!animating) updateHover();
   };
 
-  // Kiểm tra điều kiện thắng (4 hướng: ngang, dọc, chéo xuống phải, chéo xuống trái)
+  // Kiểm tra điều kiện thắng (ngang, dọc, chéo)
   const hasPlayerWon = (player) => {
     for (let row = 0; row < boardHeight; row++) {
       for (let col = 0; col < boardWidth; col++) {
@@ -186,7 +209,6 @@ document.addEventListener("DOMContentLoaded", () => {
         ) {
           return true;
         }
-
         // Dọc
         if (
           row <= boardHeight - 4 &&
@@ -196,7 +218,6 @@ document.addEventListener("DOMContentLoaded", () => {
         ) {
           return true;
         }
-
         // Chéo xuống phải
         if (
           col <= boardWidth - 4 &&
@@ -207,7 +228,6 @@ document.addEventListener("DOMContentLoaded", () => {
         ) {
           return true;
         }
-
         // Chéo xuống trái
         if (
           col >= 3 &&
@@ -223,7 +243,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return false;
   };
 
-  // Khởi tạo board dựa theo kích thước được chọn
+  // Khởi tạo board và cập nhật kích thước board theo lựa chọn
   if (boardSizeSelect && board) {
     setBoardDimensions(boardSizeSelect.value);
     boardSizeSelect.addEventListener("change", () =>
