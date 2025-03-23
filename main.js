@@ -7,6 +7,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const player1ColorSelect = document.querySelector("#player1-color");
   const player2ColorSelect = document.querySelector("#player2-color");
 
+  board.classList.add("disabled"); // Vô hiệu hóa bàn cờ ban đầu
+  document.getElementById("new-game").addEventListener("click", function () {
+    // Hiển thị thông báo lượt chơi
+    document.getElementById("turn-notification").style.visibility = "visible";
+});
+
   // Số cột và hàng mặc định của board
   let boardWidth = 7;
   let boardHeight = 6;
