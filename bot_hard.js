@@ -217,6 +217,14 @@ function negamax(board, depth, alpha, beta, color) {
       return { score: color * evaluateBoard(board, AI) };
     }
   }
+  const piece = color === 1 ? AI : PLAYER;
+  validLocations.sort((a, b) => {
+    const boardA = makeMove(board, a, piece);
+    const boardB = makeMove(board, b, piece);
+    return (
+      color * evaluateBoard(boardB, AI) - color * evaluateBoard(boardA, AI)
+    );
+  });
 
   let value = -Infinity;
   let bestColumn = validLocations[0];
