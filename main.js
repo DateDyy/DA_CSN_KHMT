@@ -6,12 +6,28 @@ document.addEventListener("DOMContentLoaded", () => {
   const boardSizeSelect = document.querySelector("#board-size");
   const player1ColorSelect = document.querySelector("#player1-color");
   const player2ColorSelect = document.querySelector("#player2-color");
+  const reviewButton = document.getElementById("review");
 
   board.classList.add("disabled"); // Vô hiệu hóa bàn cờ ban đầu
-  document.getElementById("new-game").addEventListener("click", function () {
-    // Hiển thị thông báo lượt chơi
-    document.getElementById("turn-notification").style.visibility = "visible";
+
+// Sự kiện khi bắt đầu trò chơi
+document.getElementById("start-game").addEventListener("click", function () {
+  document.getElementById("turn-notification").style.visibility = "visible";
+  board.classList.remove("visibi"); // Vô hiệu hóa bàn cờ ban đầu
 });
+
+  // Sự kiện khi đóng options
+  document.getElementById("close-options").addEventListener("click", function () {
+    document.getElementById("turn-notification").style.visibility = "hidden";
+    board.classList.add("visibi"); // Vô hiệu hóa bàn cờ ban đầu
+    initializeBoard();
+  });
+  // Sự kiện khi click xem kết quả
+  reviewButton.addEventListener("click", () => {
+    modalContainer.style.display = "none"; // Ẩn bảng modal-container khi bấm Review results
+    board.classList.add("disabled"); // Khóa bàn cờ
+    document.getElementById("turn-notification").style.visibility = "hidden";
+  });
 
   // Số cột và hàng mặc định của board
   let boardWidth = 7;
@@ -49,10 +65,13 @@ document.addEventListener("DOMContentLoaded", () => {
     initializeBoard();
   };
 
-  resetButton.addEventListener("click", () => {
-    modalContainer.style.display = "none";
-    initializeBoard();
-  });
+    // Reset game khi bấm "Reset"
+    resetButton.addEventListener("click", () => {
+      modalContainer.style.display = "none";
+      initializeBoard();
+      board.classList.remove("disabled"); // Đảm bảo bàn cờ không bị vô hiệu hóa sau reset
+      gameStarted = true; // Giữ trạng thái game đã bắt đầu
+    });
 
   // Khởi tạo lại board: reset trạng thái, mảng pieces và tạo các ô mới
   window.initializeBoard = () => {
@@ -213,6 +232,12 @@ document.addEventListener("DOMContentLoaded", () => {
           pieces[row * boardWidth + (col + 2)] === player &&
           pieces[row * boardWidth + (col + 3)] === player
         ) {
+          highlightWinningCells([
+            [row, col],
+            [row, col + 1],
+            [row, col + 2],
+            [row, col + 3],
+          ]);
           return true;
         }
         // Dọc
@@ -222,6 +247,12 @@ document.addEventListener("DOMContentLoaded", () => {
           pieces[(row + 2) * boardWidth + col] === player &&
           pieces[(row + 3) * boardWidth + col] === player
         ) {
+          highlightWinningCells([
+            [row, col],
+            [row + 1, col],
+            [row + 2, col],
+            [row + 3, col],
+          ]);
           return true;
         }
         // Chéo xuống phải
@@ -232,6 +263,12 @@ document.addEventListener("DOMContentLoaded", () => {
           pieces[(row + 2) * boardWidth + (col + 2)] === player &&
           pieces[(row + 3) * boardWidth + (col + 3)] === player
         ) {
+          highlightWinningCells([
+            [row, col],
+            [row + 1, col + 1],
+            [row + 2, col + 2],
+            [row + 3, col + 3],
+          ]);
           return true;
         }
         // Chéo xuống trái
@@ -242,12 +279,28 @@ document.addEventListener("DOMContentLoaded", () => {
           pieces[(row + 2) * boardWidth + (col - 2)] === player &&
           pieces[(row + 3) * boardWidth + (col - 3)] === player
         ) {
+          highlightWinningCells([
+            [row, col],
+            [row + 1, col - 1],
+            [row + 2, col - 2],
+            [row + 3, col - 3],
+          ]);
           return true;
         }
       }
     }
     return false;
   };
+
+  // Hàm làm nổi bật các quân cờ chiến thắng
+function highlightWinningCells(winningCells) {
+  winningCells.forEach(([row, col]) => {
+    const cell = board.children[row * boardWidth + col];
+    if (cell) {
+      cell.classList.add("winning-cell");
+    }
+  });
+}
 
   // Khởi tạo board và cập nhật kích thước board theo lựa chọn
   if (boardSizeSelect && board) {
