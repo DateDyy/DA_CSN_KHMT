@@ -1,12 +1,15 @@
-.winning-cell {
-    animation: flash 1s infinite alternate;
+.winning-piece {
+  animation: highlight 1s infinite alternate;
+  box-shadow: 0px 0px 25px rgba(255, 255, 0, 0.8);
+}
+
+@keyframes highlight {
+  0% {
+    transform: scale(1);
+    background-color: rgba(83, 5, 83, 0.7)
   }
-  
-  @keyframes flash {
-    from {
-      background-color: rgb(16, 16, 16);
-    }
-    to {
-      background-color: rgb(0, 0, 0);
-    }
+  50% {
+    transform: scale(1);
+    background-color: rgba(86, 1, 86, 0.7)
   }
+}

@@ -11,15 +11,33 @@ document.addEventListener("DOMContentLoaded", () => {
   const player2ColorSelect = document.querySelector("#player2-color");
   const player1TypeSelect = document.querySelector("#player1-type");
   const player2TypeSelect = document.querySelector("#player2-type");
+  const reviewButton = document.getElementById("review");
   const computerDifficultySelect = document.querySelector(
     "#computer-difficulty"
   );
 
-  board.classList.add("disabled"); // Vô hiệu hóa bàn cờ ban đầu
-  document.getElementById("new-game").addEventListener("click", function () {
-    // Hiển thị thông báo lượt chơi
-    document.getElementById("turn-notification").style.visibility = "visible";
+board.classList.add("disabled"); // Vô hiệu hóa bàn cờ ban đầu
+
+// Sự kiện khi bắt đầu trò chơi
+document.getElementById("start-game").addEventListener("click", function () {
+  document.getElementById("turn-notification").style.visibility = "visible";
+  board.classList.remove("visibi"); // Vô hiệu hóa bàn cờ ban đầu
+});
+
+  // Sự kiện khi đóng options
+  document.getElementById("close-options").addEventListener("click", function () {
+    document.getElementById("turn-notification").style.visibility = "hidden";
+    board.classList.add("visibi"); // Vô hiệu hóa bàn cờ ban đầu
+    initializeBoard();
   });
+
+  // Sự kiện khi click xem kết quả
+  reviewButton.addEventListener("click", () => {
+    modalContainer.style.display = "none"; // Ẩn bảng modal-container khi bấm Review results
+    board.classList.add("disabled"); // Khóa bàn cờ
+    document.getElementById("turn-notification").style.visibility = "hidden";
+  });
+
 
   // Số cột và hàng mặc định
   let boardWidth = 7;
@@ -71,11 +89,15 @@ document.addEventListener("DOMContentLoaded", () => {
     initializeBoard();
   };
 
-  resetButton.addEventListener("click", () => {
-    modalContainer.style.display = "none";
-    initializeBoard();
-  });
-
+    // Reset game khi bấm "Reset"
+    resetButton.addEventListener("click", () => {
+      modalContainer.style.display = "none";
+      initializeBoard();
+      board.classList.remove("disabled"); // Đảm bảo bàn cờ không bị vô hiệu hóa sau reset
+      gameStarted = true; // Giữ trạng thái game đã bắt đầu
+    });
+  
+  // Khởi tạo lại board: reset trạng thái, mảng pieces và tạo các ô mới
   window.initializeBoard = () => {
     board.innerHTML = "";
     pieces = new Array(boardWidth * boardHeight).fill(0);
@@ -171,12 +193,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const checkGameWinOrDraw = () => {
     animating = false;
+    
     if (!pieces.includes(0)) {
       modalContainer.style.display = "block";
       modalMessage.textContent = "Draw";
       return;
     }
-    if (hasPlayerWon(playerTurn)) {
+  
+    const winningPositions = hasPlayerWon(playerTurn);
+    
+    if (winningPositions) {
       modalContainer.style.display = "block";
       const winnerColor =
         playerTurn === FIRST_TURN
@@ -185,13 +211,22 @@ document.addEventListener("DOMContentLoaded", () => {
       modalMessage.textContent = `Player ${playerTurn} WON!`;
       modalMessage.style.color = winnerColor;
       modalMessage.dataset.winner = playerTurn;
+  
+      // Thêm hiệu ứng nổi bật các quân cờ chiến thắng
+      winningPositions.forEach((index) => {
+        const cell = board.children[index];
+        cell.firstChild.classList.add("winning-piece");
+      });
+  
       return;
     }
+  
     playerTurn = playerTurn === FIRST_TURN ? SECOND_TURN : FIRST_TURN;
     updateTurnNotification();
     checkAndMakeAIMove();
     updateHover();
   };
+  
 
   const updateHover = () => {
     removeUnplacedPiece();
@@ -215,45 +250,80 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!animating) updateHover();
   };
 
+  //hàm kiểm tra chiến thắng
   const hasPlayerWon = (player) => {
     for (let row = 0; row < boardHeight; row++) {
       for (let col = 0; col < boardWidth; col++) {
         const index = row * boardWidth + col;
         if (pieces[index] !== player) continue;
+  
+        // Kiểm tra thắng theo hàng ngang
         if (
           col <= boardWidth - 4 &&
           pieces[row * boardWidth + (col + 1)] === player &&
           pieces[row * boardWidth + (col + 2)] === player &&
           pieces[row * boardWidth + (col + 3)] === player
-        )
-          return true;
+        ) {
+          return [
+            index,
+            row * boardWidth + (col + 1),
+            row * boardWidth + (col + 2),
+            row * boardWidth + (col + 3),
+          ];
+        }
+  
+        // Kiểm tra thắng theo hàng dọc
         if (
           row <= boardHeight - 4 &&
           pieces[(row + 1) * boardWidth + col] === player &&
           pieces[(row + 2) * boardWidth + col] === player &&
           pieces[(row + 3) * boardWidth + col] === player
-        )
-          return true;
+        ) {
+          return [
+            index,
+            (row + 1) * boardWidth + col,
+            (row + 2) * boardWidth + col,
+            (row + 3) * boardWidth + col,
+          ];
+        }
+  
+        // Kiểm tra thắng theo đường chéo /
         if (
           col <= boardWidth - 4 &&
           row <= boardHeight - 4 &&
           pieces[(row + 1) * boardWidth + (col + 1)] === player &&
           pieces[(row + 2) * boardWidth + (col + 2)] === player &&
           pieces[(row + 3) * boardWidth + (col + 3)] === player
-        )
-          return true;
+        ) {
+          return [
+            index,
+            (row + 1) * boardWidth + (col + 1),
+            (row + 2) * boardWidth + (col + 2),
+            (row + 3) * boardWidth + (col + 3),
+          ];
+        }
+  
+        // Kiểm tra thắng theo đường chéo \
         if (
           col >= 3 &&
           row <= boardHeight - 4 &&
           pieces[(row + 1) * boardWidth + (col - 1)] === player &&
           pieces[(row + 2) * boardWidth + (col - 2)] === player &&
           pieces[(row + 3) * boardWidth + (col - 3)] === player
-        )
-          return true;
+        ) {
+          return [
+            index,
+            (row + 1) * boardWidth + (col - 1),
+            (row + 2) * boardWidth + (col - 2),
+            (row + 3) * boardWidth + (col - 3),
+          ];
+        }
       }
     }
-    return false;
+  
+    return null;
   };
+  
 
   // Hàm gọi AI cấp hard
   const makeHardAIMove = () => {
