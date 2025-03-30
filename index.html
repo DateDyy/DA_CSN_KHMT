@@ -9,13 +9,31 @@
   <link href="styles.css" rel="stylesheet">
   <link href="winning.css" rel="stylesheet">
   <link href="NewGame.css" rel="stylesheet">
+  <link href="board_rule.css" rel="stylesheet">
   <link rel="icon" type="image/png" href="img/four-in-line.png">
+
 </head>
 
-<body
-  style="background-image: url('/img/BG_Wood.png'); background-repeat: no-repeat; background-size: cover; background-position: center;">
+<body style="background-image: url('/img/BG_Wood.png'); background-repeat: no-repeat; background-size: cover; background-position: center;">
   <h1>Four In Line</h1>
+  
+  <button id="rules-button">How to Play</button>
+  <div id="rules-container">
+    <h2>How to Play</h2>
+    <p>1. Players take turns dropping pieces into a column.</p>
+    <p>2. The piece will land on the lowest available row.</p>
+    <p>3. The goal is to connect four pieces in a row, column, or diagonal.</p>
+    <p>4. The game ends when a player wins or the board is full.</p>
+    <p>5. You can play against another player or an AI (Easy, Medium, Hard).</p>
+  </div>
 
+  <script>
+    document.getElementById("rules-button").addEventListener("click", function() {
+      const rulesContainer = document.getElementById("rules-container");
+      rulesContainer.style.display = (rulesContainer.style.display === "none" || rulesContainer.style.display === "") ? "block" : "none";
+    });
+  </script>
+  
   <div id="turn-notification">
     <div class="notification-content">
       <div class="player-indicator"></div>
@@ -94,7 +112,6 @@
       </div>
     </div>
   </div>
-  <!-- Sử dụng type="module" để hỗ trợ import ES Module -->
   <script type="module" src="main.js"></script>
   <script src="NewGame.js"></script>
 </body>

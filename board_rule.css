@@ -1,0 +1,35 @@
+#rules-container {
+    display: none;
+    position: absolute;
+    top: 80px;
+    right: 20px;
+    width: 250px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    font-family: Arial, sans-serif;
+  }
+  #rules-container h2 {
+    text-align: center;
+    font-size: 18px;
+  }
+  #rules-container p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  #rules-button {
+    font-weight: bold;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    background-color: #fbf8f8;
+    color: rgb(7, 5, 5);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  #rules-button:hover {
+    background-color:  #7f7c7c;
+  }

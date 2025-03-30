@@ -85,7 +85,7 @@ function winningMove(board, piece) {
       }
     }
   }
-  return false;
+  return false; 
 }
 
 // Hàm đánh giá (Heuristic Evaluation Function) từng nhóm 4 ô nhỏ.
