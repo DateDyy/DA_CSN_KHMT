@@ -1,6 +1,7 @@
 // main.js
 import { getBestMove } from "./bot_hard.js";
 import { getBestMove as  getBestMove_nor } from "./normal_bot.js";
+import { getBestMove as  getBestMove_ez } from "./Easy_bot.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const board = document.querySelector("#board");
@@ -146,10 +147,10 @@ document.getElementById("start-game").addEventListener("click", function () {
       setTimeout(() => {
         if (difficulty === "medium") {
           makeNormalAIMove(getBestMove_nor);
-          // makeHardAIMove(getBestMoveHard);
         } else if (difficulty === "hard") {
-          // makeNormalAIMove(getBestMoveNormal);
           makeHardAIMove(getBestMove);
+        } else if (difficulty ==="easy") {
+          makeEasyAIMove(getBestMove_ez);
         }
       }, 200);
     }
@@ -330,9 +331,23 @@ document.getElementById("start-game").addEventListener("click", function () {
   
     return null;
   };
+
+  const makeEasyAIMove = () => {
+    // Chuyển board 1D sang 2D
+    const board2D = convertPiecesTo2D(pieces, boardWidth, boardHeight);
+    
+    // Gọi bot cấp Easy (depth = 2)
+    const moveColumn = getBestMove_ez(board2D, 2);
   
-// Hàm gọi AI cấp normal
-const makeNormalAIMove = () => {
+    // Thực hiện nước đi nếu hợp lệ
+    if (moveColumn >= 0 && moveColumn < boardWidth) {
+      onColumnClicked(moveColumn);
+    }
+  };
+  
+
+  // Hàm gọi AI cấp normal
+  const makeNormalAIMove = () => {
   // Chuyển board 1D sang 2D để phù hợp với logic của normal_bot.js
   const board2D = convertPiecesTo2D(pieces, boardWidth, boardHeight);
   // Lấy cột nước đi tốt nhất từ bot normal (depth = 4 có thể thay đổi)

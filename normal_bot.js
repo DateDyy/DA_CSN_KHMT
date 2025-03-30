@@ -88,7 +88,7 @@ function winningMove(board, piece) {
   return false;
 }
 
-// Hàm quét một cửa sổ (window) gồm 4 ô và tính điểm cho cửa sổ đó
+// Hàm đánh giá (Heuristic Evaluation Function) từng nhóm 4 ô nhỏ.
 function scoreWindow(window, piece) {
   let score = 0;
   const opponent = piece === AI ? PLAYER : AI;
@@ -98,12 +98,12 @@ function scoreWindow(window, piece) {
 
   if (countPiece === 4) {
     score += 50;
-  } else if (countPiece === 3 && countEmpty === 1) {
+  } else if (countPiece === 3 && countEmpty === 1) { // AI có 3 quân + 1 ô trống
     score += 3;
-  } else if (countPiece === 2 && countEmpty === 2) {
+  } else if (countPiece === 2 && countEmpty === 2) { // AI có 2 quân + 2 ô trống
     score += 1;
   }
-
+  // Nếu đối thủ có 3 quân + 1 ô trống, giảm điểm để ưu tiên chặn
   if (countOpponent === 3 && countEmpty === 1) {
     score -= 2;
   }
@@ -111,7 +111,8 @@ function scoreWindow(window, piece) {
   return score;
 }
 
-// Hàm đánh giá board hiện tại cho AI theo nhiều tiêu chí
+// Hàm đánh giá toàn bộ bàn cờ hiện tại cho AI theo nhiều tiêu chí
+//Đánh giá tổng thể bàn cờ bằng cách quét qua từng hàng, cột, và đường chéo.
 function evaluateBoard(board, piece) {
   if (winningMove(board, AI)) return 1000000;
   if (winningMove(board, PLAYER)) return -1000000;
@@ -197,7 +198,7 @@ function getValidLocations(board) {
 /*
   Thuật toán Negamax:
   - Sử dụng tham số "color" (+1 nếu lượt của AI, -1 nếu lượt của đối thủ)
-  - Đánh giá board từ góc nhìn của AI: sử dụng color * evaluateBoard_nor(board, AI)
+  - Đánh giá board từ góc nhìn của AI: sử dụng color * evaluateBoard(board, AI)
   - Khi thực hiện nước đi, nếu color == +1 thì nước đi của AI, nếu -1 thì của PLAYER.
 */
 function negamax(board, depth, alpha, beta, color) {
@@ -219,26 +220,30 @@ function negamax(board, depth, alpha, beta, color) {
   }
 
   const piece = color === 1 ? AI : PLAYER;
-  let bestScore = -Infinity;
-  let bestMoves = [];
+  validLocations.sort((a, b) => {
+    const boardA = makeMove(board, a, piece);
+    const boardB = makeMove(board, b, piece);
+    return (
+      color * evaluateBoard(boardB, AI) - color * evaluateBoard(boardA, AI)
+    );
+  });
+
+  let value = -Infinity;
+  let bestColumn = validLocations[0];
 
   for (let col of validLocations) {
+    const piece = color === 1 ? AI : PLAYER;
     const newBoard = makeMove(board, col, piece);
     const newScore = -negamax(newBoard, depth - 1, -beta, -alpha, -color).score;
-
-    if (newScore > bestScore) {
-      bestScore = newScore;
-      bestMoves = [col]; // Chỉ giữ lại nước đi tốt nhất mới
-    } else if (newScore === bestScore) {
-      bestMoves.push(col); // Thêm vào danh sách nước đi ngang điểm
+    if (newScore > value) {
+      value = newScore;
+      bestColumn = col;
     }
-
-    alpha = Math.max(alpha, newScore);
-    if (alpha >= beta) break; // Cắt tỉa alpha-beta
+    alpha = Math.max(alpha, value);
+    if (alpha >= beta) break;
   }
 
-  let bestColumn = bestMoves[Math.floor(Math.random() * bestMoves.length)];
-  return { column: bestColumn, score: bestScore };
+  return { column: bestColumn, score: value };
 }
 
 
