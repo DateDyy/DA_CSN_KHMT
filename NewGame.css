@@ -148,7 +148,11 @@
 /* Khi hiển thị Game Options, vô hiệu hóa thao tác trên board */
 #board.disabled {
   pointer-events: none;
-  opacity: 0.3;
+  opacity: 0.5;
+}
+#board.visibi {
+  pointer-events: none;
+  opacity: 0.5;
 }
 
 /* Responsive styles cho modal Game Options */

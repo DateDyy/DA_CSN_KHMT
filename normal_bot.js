@@ -1,4 +1,4 @@
-// bot_hard.js
+// normal_bot.js
 
 // Các hằng số cho Connect 4 (vẫn giữ các hằng số cho EMPTY, PLAYER, AI)
 const EMPTY = 0;
@@ -97,15 +97,15 @@ function scoreWindow(window, piece) {
   const countEmpty = window.filter((cell) => cell === EMPTY).length;
 
   if (countPiece === 4) {
-    score += 100;
+    score += 50;
   } else if (countPiece === 3 && countEmpty === 1) {
-    score += 5;
+    score += 3;
   } else if (countPiece === 2 && countEmpty === 2) {
-    score += 2;
+    score += 1;
   }
 
   if (countOpponent === 3 && countEmpty === 1) {
-    score -= 4;
+    score -= 2;
   }
 
   return score;
@@ -197,7 +197,7 @@ function getValidLocations(board) {
 /*
   Thuật toán Negamax:
   - Sử dụng tham số "color" (+1 nếu lượt của AI, -1 nếu lượt của đối thủ)
-  - Đánh giá board từ góc nhìn của AI: sử dụng color * evaluateBoard(board, AI)
+  - Đánh giá board từ góc nhìn của AI: sử dụng color * evaluateBoard_nor(board, AI)
   - Khi thực hiện nước đi, nếu color == +1 thì nước đi của AI, nếu -1 thì của PLAYER.
 */
 function negamax(board, depth, alpha, beta, color) {
@@ -217,35 +217,34 @@ function negamax(board, depth, alpha, beta, color) {
       return { score: color * evaluateBoard(board, AI) };
     }
   }
-  const piece = color === 1 ? AI : PLAYER;
-  validLocations.sort((a, b) => {
-    const boardA = makeMove(board, a, piece);
-    const boardB = makeMove(board, b, piece);
-    return (
-      color * evaluateBoard(boardB, AI) - color * evaluateBoard(boardA, AI)
-    );
-  });
 
-  let value = -Infinity;
-  let bestColumn = validLocations[0];
+  const piece = color === 1 ? AI : PLAYER;
+  let bestScore = -Infinity;
+  let bestMoves = [];
 
   for (let col of validLocations) {
-    const piece = color === 1 ? AI : PLAYER;
     const newBoard = makeMove(board, col, piece);
     const newScore = -negamax(newBoard, depth - 1, -beta, -alpha, -color).score;
-    if (newScore > value) {
-      value = newScore;
-      bestColumn = col;
+
+    if (newScore > bestScore) {
+      bestScore = newScore;
+      bestMoves = [col]; // Chỉ giữ lại nước đi tốt nhất mới
+    } else if (newScore === bestScore) {
+      bestMoves.push(col); // Thêm vào danh sách nước đi ngang điểm
     }
-    alpha = Math.max(alpha, value);
-    if (alpha >= beta) break;
+
+    alpha = Math.max(alpha, newScore);
+    if (alpha >= beta) break; // Cắt tỉa alpha-beta
   }
 
-  return { column: bestColumn, score: value };
+  let bestColumn = bestMoves[Math.floor(Math.random() * bestMoves.length)];
+  return { column: bestColumn, score: bestScore };
 }
 
-// Hàm lấy nước đi tốt nhất cho AI với độ sâu tìm kiếm (mặc định = 5)
+
+// Hàm lấy nước đi tốt nhất cho AI với độ sâu tìm kiếm (mặc định = 4)
 // Dùng negamax với màu ban đầu là +1 (tức là lượt của AI)
-export function getBestMove(board, depth = 5) {
+export function getBestMove(board, depth = 3) {
+  console.log("Normal bot is calculating best move...");
   return negamax(board, depth, -Infinity, Infinity, 1).column;
-}
+} 

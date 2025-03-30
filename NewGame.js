@@ -46,6 +46,44 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  
+  function loadBotScript(difficulty) {
+    let botScript = document.getElementById("bot-script");
+
+    let botFile = "";
+    if (difficulty === "easy") {
+        botFile = "easy_bot.js";
+    } else if (difficulty === "medium") {
+        botFile = "normal_bot.js";
+    } else if (difficulty === "hard") {
+        botFile = "bot_hard.js";
+    }
+
+    if (!botFile) return;
+
+    // Kiểm tra và xóa script cũ nếu có
+    if (botScript) {
+        botScript.remove();
+    }
+
+    // Tạo script mới
+    botScript = document.createElement("script");
+    botScript.id = "bot-script";
+    botScript.src = botFile;
+    botScript.type = "module";  
+    botScript.onload = () => console.log(`Loaded bot: ${botFile}`);
+    botScript.onerror = () => console.error(`Failed to load bot: ${botFile}`);
+    document.body.appendChild(botScript);
+}
+
+
+startGameButton.addEventListener("click", () => {
+  const difficulty = aiDifficulty.value;
+  console.log("Selected difficulty:", difficulty); // Debug xem có lấy đúng giá trị không
+  loadBotScript(difficulty);
+});
+
+
   // Định nghĩa đối tượng ánh xạ màu
   const colorMap = {
     red: "rgba(235, 16, 16, 0.916)",
