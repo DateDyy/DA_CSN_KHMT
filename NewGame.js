@@ -70,6 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
     botScript = document.createElement("script");
     botScript.id = "bot-script";
     botScript.src = botFile;
+    botScript.type = "module";  
     botScript.onload = () => console.log(`Loaded bot: ${botFile}`);
     botScript.onerror = () => console.error(`Failed to load bot: ${botFile}`);
     document.body.appendChild(botScript);
