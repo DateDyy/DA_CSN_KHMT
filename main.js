@@ -1,6 +1,6 @@
 // main.js
-import { getBestMove } from "./bot_hard.js";
-import { getBestMove as  getBestMove_nor } from "./normal_bot.js";
+import { getBestMove as getHardMove } from "./bot_hard.js";
+import { getBestMove as getMediumMove } from "./normal_bot.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const board = document.querySelector("#board");
@@ -13,22 +13,26 @@ document.addEventListener("DOMContentLoaded", () => {
   const player1TypeSelect = document.querySelector("#player1-type");
   const player2TypeSelect = document.querySelector("#player2-type");
   const reviewButton = document.getElementById("review");
-  const computerDifficultySelect = document.querySelector("#computer-difficulty");
+  const computerDifficultySelect = document.querySelector(
+    "#computer-difficulty"
+  );
 
-board.classList.add("disabled"); // Vô hiệu hóa bàn cờ ban đầu
+  board.classList.add("disabled"); // Vô hiệu hóa bàn cờ ban đầu
 
-// Sự kiện khi bắt đầu trò chơi
-document.getElementById("start-game").addEventListener("click", function () {
-  document.getElementById("turn-notification").style.visibility = "visible";
-  board.classList.remove("visibi"); // Vô hiệu hóa bàn cờ ban đầu
-});
+  // Sự kiện khi bắt đầu trò chơi
+  document.getElementById("start-game").addEventListener("click", function () {
+    document.getElementById("turn-notification").style.visibility = "visible";
+    board.classList.remove("visibi"); // Vô hiệu hóa bàn cờ ban đầu
+  });
 
   // Sự kiện khi đóng options
-  document.getElementById("close-options").addEventListener("click", function () {
-    document.getElementById("turn-notification").style.visibility = "hidden";
-    board.classList.add("visibi"); // Vô hiệu hóa bàn cờ ban đầu
-    initializeBoard();
-  });
+  document
+    .getElementById("close-options")
+    .addEventListener("click", function () {
+      document.getElementById("turn-notification").style.visibility = "hidden";
+      board.classList.add("visibi"); // Vô hiệu hóa bàn cờ ban đầu
+      initializeBoard();
+    });
 
   // Sự kiện khi click xem kết quả
   reviewButton.addEventListener("click", () => {
@@ -36,7 +40,6 @@ document.getElementById("start-game").addEventListener("click", function () {
     board.classList.add("disabled"); // Khóa bàn cờ
     document.getElementById("turn-notification").style.visibility = "hidden";
   });
-
 
   // Số cột và hàng mặc định
   let boardWidth = 7;
@@ -88,14 +91,14 @@ document.getElementById("start-game").addEventListener("click", function () {
     initializeBoard();
   };
 
-    // Reset game khi bấm "Reset"
-    resetButton.addEventListener("click", () => {
-      modalContainer.style.display = "none";
-      initializeBoard();
-      board.classList.remove("disabled"); // Đảm bảo bàn cờ không bị vô hiệu hóa sau reset
-      gameStarted = true; // Giữ trạng thái game đã bắt đầu
-    });
-  
+  // Reset game khi bấm "Reset"
+  resetButton.addEventListener("click", () => {
+    modalContainer.style.display = "none";
+    initializeBoard();
+    board.classList.remove("disabled"); // Đảm bảo bàn cờ không bị vô hiệu hóa sau reset
+    gameStarted = true; // Giữ trạng thái game đã bắt đầu
+  });
+
   // Khởi tạo lại board: reset trạng thái, mảng pieces và tạo các ô mới
   window.initializeBoard = () => {
     board.innerHTML = "";
@@ -145,16 +148,15 @@ document.getElementById("start-game").addEventListener("click", function () {
       console.log(difficulty);
       setTimeout(() => {
         if (difficulty === "medium") {
-          makeNormalAIMove(getBestMove_nor);
+          makeNormalAIMove(getMediumMove);
           // makeHardAIMove(getBestMoveHard);
         } else if (difficulty === "hard") {
           // makeNormalAIMove(getBestMoveNormal);
-          makeHardAIMove(getBestMove);
+          makeHardAIMove(getHardMove);
         }
       }, 200);
     }
   };
-  
 
   const getAvailableRowInColumn = (column) => {
     for (let row = boardHeight - 1; row >= 0; row--) {
@@ -200,15 +202,15 @@ document.getElementById("start-game").addEventListener("click", function () {
 
   const checkGameWinOrDraw = () => {
     animating = false;
-    
+
     if (!pieces.includes(0)) {
       modalContainer.style.display = "block";
       modalMessage.textContent = "Draw";
       return;
     }
-  
+
     const winningPositions = hasPlayerWon(playerTurn);
-    
+
     if (winningPositions) {
       modalContainer.style.display = "block";
       const winnerColor =
@@ -218,13 +220,13 @@ document.getElementById("start-game").addEventListener("click", function () {
       modalMessage.textContent = `Player ${playerTurn} WON!`;
       modalMessage.style.color = winnerColor;
       modalMessage.dataset.winner = playerTurn;
-  
+
       // Thêm hiệu ứng nổi bật các quân cờ chiến thắng
       winningPositions.forEach((index) => {
         const cell = board.children[index];
         cell.firstChild.classList.add("winning-piece");
       });
-  
+
       return;
     }
     // Chuyển lượt chơi
@@ -233,7 +235,6 @@ document.getElementById("start-game").addEventListener("click", function () {
     checkAndMakeAIMove();
     updateHover();
   };
-  
 
   const updateHover = () => {
     removeUnplacedPiece();
@@ -263,7 +264,7 @@ document.getElementById("start-game").addEventListener("click", function () {
       for (let col = 0; col < boardWidth; col++) {
         const index = row * boardWidth + col;
         if (pieces[index] !== player) continue;
-  
+
         // Kiểm tra thắng theo hàng ngang
         if (
           col <= boardWidth - 4 &&
@@ -278,7 +279,7 @@ document.getElementById("start-game").addEventListener("click", function () {
             row * boardWidth + (col + 3),
           ];
         }
-  
+
         // Kiểm tra thắng theo hàng dọc
         if (
           row <= boardHeight - 4 &&
@@ -293,7 +294,7 @@ document.getElementById("start-game").addEventListener("click", function () {
             (row + 3) * boardWidth + col,
           ];
         }
-  
+
         // Kiểm tra thắng theo đường chéo /
         if (
           col <= boardWidth - 4 &&
@@ -309,7 +310,7 @@ document.getElementById("start-game").addEventListener("click", function () {
             (row + 3) * boardWidth + (col + 3),
           ];
         }
-  
+
         // Kiểm tra thắng theo đường chéo \
         if (
           col >= 3 &&
@@ -327,28 +328,27 @@ document.getElementById("start-game").addEventListener("click", function () {
         }
       }
     }
-  
+
     return null;
   };
-  
-// Hàm gọi AI cấp normal
-const makeNormalAIMove = () => {
-  // Chuyển board 1D sang 2D để phù hợp với logic của normal_bot.js
-  const board2D = convertPiecesTo2D(pieces, boardWidth, boardHeight);
-  // Lấy cột nước đi tốt nhất từ bot normal (depth = 4 có thể thay đổi)
-  const moveColumn = getBestMove_nor(board2D, 4);
-  if (moveColumn >= 0 && moveColumn < boardWidth) {
-    onColumnClicked(moveColumn);
-  }
-};
 
+  // Hàm gọi AI cấp normal
+  const makeNormalAIMove = () => {
+    // Chuyển board 1D sang 2D để phù hợp với logic của normal_bot.js
+    const board2D = convertPiecesTo2D(pieces, boardWidth, boardHeight);
+    // Lấy cột nước đi tốt nhất từ bot normal (depth = 4 có thể thay đổi)
+    const moveColumn = getMediumMove(board2D, 4);
+    if (moveColumn >= 0 && moveColumn < boardWidth) {
+      onColumnClicked(moveColumn);
+    }
+  };
 
   // Hàm gọi AI cấp hard
   const makeHardAIMove = () => {
     // Chuyển board 1D sang 2D để phù hợp với logic của bot_hard.js
     const board2D = convertPiecesTo2D(pieces, boardWidth, boardHeight);
     // Lấy cột nước đi tốt nhất từ bot_hard (depth = 5 có thể thay đổi)
-    const moveColumn = getBestMove(board2D, 7);
+    const moveColumn = getHardMove(board2D, 5);
     if (moveColumn >= 0 && moveColumn < boardWidth) {
       onColumnClicked(moveColumn);
     }
