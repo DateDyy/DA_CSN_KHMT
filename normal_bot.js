@@ -88,11 +88,7 @@ function winningMove(board, piece) {
   return false;
 }
 
-<<<<<<< Updated upstream
 // Hàm đánh giá (Heuristic Evaluation Function) từng nhóm 4 ô nhỏ.
-=======
-// Hàm đánh giá (Heuristic Evaluation Function) điểm số cho một nhóm 4 ô (cửa sổ) theo số lượng quân cờ của AI và đối thủ.
->>>>>>> Stashed changes
 function scoreWindow(window, piece) {
   let score = 0;
   const opponent = piece === AI ? PLAYER : AI;
