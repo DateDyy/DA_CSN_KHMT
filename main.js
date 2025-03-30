@@ -1,5 +1,6 @@
 // main.js
 import { getBestMove } from "./bot_hard.js";
+import { getBestMove as  getBestMove_nor } from "./normal_bot.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const board = document.querySelector("#board");
@@ -12,9 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const player1TypeSelect = document.querySelector("#player1-type");
   const player2TypeSelect = document.querySelector("#player2-type");
   const reviewButton = document.getElementById("review");
-  const computerDifficultySelect = document.querySelector(
-    "#computer-difficulty"
-  );
+  const computerDifficultySelect = document.querySelector("#computer-difficulty");
 
 board.classList.add("disabled"); // Vô hiệu hóa bàn cờ ban đầu
 
@@ -141,13 +140,21 @@ document.getElementById("start-game").addEventListener("click", function () {
   };
   // Hàm kiểm tra và gọi nước đi AI nếu cần
   const checkAndMakeAIMove = () => {
-    if (
-      getCurrentPlayerType() === "computer" &&
-      computerDifficultySelect.value === "hard"
-    ) {
-      setTimeout(makeHardAIMove, 200);
+    if (getCurrentPlayerType() === "computer") {
+      const difficulty = computerDifficultySelect.value;
+      console.log(difficulty);
+      setTimeout(() => {
+        if (difficulty === "medium") {
+          makeNormalAIMove(getBestMove_nor);
+          // makeHardAIMove(getBestMoveHard);
+        } else if (difficulty === "hard") {
+          // makeNormalAIMove(getBestMoveNormal);
+          makeHardAIMove(getBestMove);
+        }
+      }, 200);
     }
   };
+  
 
   const getAvailableRowInColumn = (column) => {
     for (let row = boardHeight - 1; row >= 0; row--) {
@@ -220,7 +227,7 @@ document.getElementById("start-game").addEventListener("click", function () {
   
       return;
     }
-  
+    // Chuyển lượt chơi
     playerTurn = playerTurn === FIRST_TURN ? SECOND_TURN : FIRST_TURN;
     updateTurnNotification();
     checkAndMakeAIMove();
@@ -324,6 +331,17 @@ document.getElementById("start-game").addEventListener("click", function () {
     return null;
   };
   
+// Hàm gọi AI cấp normal
+const makeNormalAIMove = () => {
+  // Chuyển board 1D sang 2D để phù hợp với logic của normal_bot.js
+  const board2D = convertPiecesTo2D(pieces, boardWidth, boardHeight);
+  // Lấy cột nước đi tốt nhất từ bot normal (depth = 4 có thể thay đổi)
+  const moveColumn = getBestMove_nor(board2D, 4);
+  if (moveColumn >= 0 && moveColumn < boardWidth) {
+    onColumnClicked(moveColumn);
+  }
+};
+
 
   // Hàm gọi AI cấp hard
   const makeHardAIMove = () => {

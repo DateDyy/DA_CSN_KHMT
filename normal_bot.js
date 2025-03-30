@@ -1,22 +1,25 @@
-const ROWS = 6;
-const COLS = 7;
-const EMPTY = 0;
-const PLAYER = 1;
-const AI = 2;
-const MAX_DEPTH = 5;
-const TIME_LIMIT = 1000; // Giới hạn thời gian tính toán (ms)
+// normal_bot.js
 
+// Các hằng số cho Connect 4 (vẫn giữ các hằng số cho EMPTY, PLAYER, AI)
+const EMPTY = 0;
+const PLAYER = 1; // Người chơi
+const AI = 2; // Bot
+
+// Tạo bản sao của board (mảng 2D)
 function copyBoard(board) {
-  return board.map(row => row.slice());
+  return board.map((row) => row.slice());
 }
 
+// Kiểm tra nước đi có hợp lệ tại cột (dựa vào số cột của board)
 function isValidMove(board, col) {
   return board[0][col] === EMPTY;
 }
 
+// Thực hiện nước đi tại cột đã chọn và trả về board mới
 function makeMove(board, col, piece) {
   const newBoard = copyBoard(board);
-  for (let row = ROWS - 1; row >= 0; row--) {
+  const rows = board.length;
+  for (let row = rows - 1; row >= 0; row--) {
     if (newBoard[row][col] === EMPTY) {
       newBoard[row][col] = piece;
       break;
@@ -25,31 +28,59 @@ function makeMove(board, col, piece) {
   return newBoard;
 }
 
+// Kiểm tra thắng cuộc: 4 quân liên tiếp theo các hướng
 function winningMove(board, piece) {
-  for (let r = 0; r < ROWS; r++) {
-    for (let c = 0; c < COLS - 3; c++) {
-      if (board[r][c] === piece && board[r][c + 1] === piece && board[r][c + 2] === piece && board[r][c + 3] === piece) {
+  const rows = board.length;
+  const cols = board[0].length;
+
+  // Hàng ngang
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols - 3; c++) {
+      if (
+        board[r][c] === piece &&
+        board[r][c + 1] === piece &&
+        board[r][c + 2] === piece &&
+        board[r][c + 3] === piece
+      ) {
         return true;
       }
     }
   }
-  for (let c = 0; c < COLS; c++) {
-    for (let r = 0; r < ROWS - 3; r++) {
-      if (board[r][c] === piece && board[r + 1][c] === piece && board[r + 2][c] === piece && board[r + 3][c] === piece) {
+  // Hàng dọc
+  for (let c = 0; c < cols; c++) {
+    for (let r = 0; r < rows - 3; r++) {
+      if (
+        board[r][c] === piece &&
+        board[r + 1][c] === piece &&
+        board[r + 2][c] === piece &&
+        board[r + 3][c] === piece
+      ) {
         return true;
       }
     }
   }
-  for (let r = 3; r < ROWS; r++) {
-    for (let c = 0; c < COLS - 3; c++) {
-      if (board[r][c] === piece && board[r - 1][c + 1] === piece && board[r - 2][c + 2] === piece && board[r - 3][c + 3] === piece) {
+  // Đường chéo xuống phải
+  for (let r = 0; r < rows - 3; r++) {
+    for (let c = 0; c < cols - 3; c++) {
+      if (
+        board[r][c] === piece &&
+        board[r + 1][c + 1] === piece &&
+        board[r + 2][c + 2] === piece &&
+        board[r + 3][c + 3] === piece
+      ) {
         return true;
       }
     }
   }
-  for (let r = 0; r < ROWS - 3; r++) {
-    for (let c = 0; c < COLS - 3; c++) {
-      if (board[r][c] === piece && board[r + 1][c + 1] === piece && board[r + 2][c + 2] === piece && board[r + 3][c + 3] === piece) {
+  // Đường chéo xuống trái
+  for (let r = 0; r < rows - 3; r++) {
+    for (let c = 3; c < cols; c++) {
+      if (
+        board[r][c] === piece &&
+        board[r + 1][c - 1] === piece &&
+        board[r + 2][c - 2] === piece &&
+        board[r + 3][c - 3] === piece
+      ) {
         return true;
       }
     }
@@ -57,15 +88,105 @@ function winningMove(board, piece) {
   return false;
 }
 
+// Hàm quét một cửa sổ (window) gồm 4 ô và tính điểm cho cửa sổ đó
+function scoreWindow(window, piece) {
+  let score = 0;
+  const opponent = piece === AI ? PLAYER : AI;
+  const countPiece = window.filter((cell) => cell === piece).length;
+  const countOpponent = window.filter((cell) => cell === opponent).length;
+  const countEmpty = window.filter((cell) => cell === EMPTY).length;
+
+  if (countPiece === 4) {
+    score += 50;
+  } else if (countPiece === 3 && countEmpty === 1) {
+    score += 3;
+  } else if (countPiece === 2 && countEmpty === 2) {
+    score += 1;
+  }
+
+  if (countOpponent === 3 && countEmpty === 1) {
+    score -= 2;
+  }
+
+  return score;
+}
+
+// Hàm đánh giá board hiện tại cho AI theo nhiều tiêu chí
 function evaluateBoard(board, piece) {
   if (winningMove(board, AI)) return 1000000;
   if (winningMove(board, PLAYER)) return -1000000;
-  return 0;
+
+  let score = 0;
+  const rows = board.length;
+  const cols = board[0].length;
+
+  // Ưu tiên nước đi ở cột trung tâm
+  const centerCol = Math.floor(cols / 2);
+  let centerArray = [];
+  for (let r = 0; r < rows; r++) {
+    centerArray.push(board[r][centerCol]);
+  }
+  const centerCount = centerArray.filter((cell) => cell === piece).length;
+  score += centerCount * 3;
+
+  // Hàng ngang
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols - 3; c++) {
+      const window = board[r].slice(c, c + 4);
+      score += scoreWindow(window, piece);
+    }
+  }
+
+  // Hàng dọc
+  for (let c = 0; c < cols; c++) {
+    for (let r = 0; r < rows - 3; r++) {
+      let window = [];
+      for (let i = 0; i < 4; i++) {
+        window.push(board[r + i][c]);
+      }
+      score += scoreWindow(window, piece);
+    }
+  }
+
+  // Đường chéo xuống phải
+  for (let r = 0; r < rows - 3; r++) {
+    for (let c = 0; c < cols - 3; c++) {
+      let window = [];
+      for (let i = 0; i < 4; i++) {
+        window.push(board[r + i][c + i]);
+      }
+      score += scoreWindow(window, piece);
+    }
+  }
+
+  // Đường chéo xuống trái
+  for (let r = 0; r < rows - 3; r++) {
+    for (let c = 3; c < cols; c++) {
+      let window = [];
+      for (let i = 0; i < 4; i++) {
+        window.push(board[r + i][c - i]);
+      }
+      score += scoreWindow(window, piece);
+    }
+  }
+
+  return score;
 }
 
+// Kiểm tra trạng thái kết thúc của board: chiến thắng hoặc board đầy
+function isTerminalNode(board) {
+  return (
+    winningMove(board, PLAYER) ||
+    winningMove(board, AI) ||
+    getValidLocations(board).length === 0
+  );
+}
+
+// Lấy danh sách các cột hợp lệ để thực hiện nước đi
 function getValidLocations(board) {
-  let validLocations = [];
-  for (let col = 0; col < COLS; col++) {
+  const cols = board[0].length;
+  const validLocations = [];
+  for (let col = 0; col < cols; col++) {
     if (isValidMove(board, col)) {
       validLocations.push(col);
     }
@@ -73,46 +194,57 @@ function getValidLocations(board) {
   return validLocations;
 }
 
-function moveOrdering(validLocations, board, piece) {
-  return validLocations.sort((a, b) => {
-    return evaluateBoard(makeMove(board, b, piece)) - evaluateBoard(makeMove(board, a, piece));
-  });
-}
+/*
+  Thuật toán Negamax:
+  - Sử dụng tham số "color" (+1 nếu lượt của AI, -1 nếu lượt của đối thủ)
+  - Đánh giá board từ góc nhìn của AI: sử dụng color * evaluateBoard_nor(board, AI)
+  - Khi thực hiện nước đi, nếu color == +1 thì nước đi của AI, nếu -1 thì của PLAYER.
+*/
+function negamax(board, depth, alpha, beta, color) {
+  const validLocations = getValidLocations(board);
+  const terminal = isTerminalNode(board);
 
-function negamax(board, depth, alpha, beta, color, startTime) {
-  if (Date.now() - startTime > TIME_LIMIT) return { score: 0, column: null };
-  
-  const validLocations = moveOrdering(getValidLocations(board), board, color === 1 ? AI : PLAYER);
-  if (depth === 0 || validLocations.length === 0 || winningMove(board, AI) || winningMove(board, PLAYER)) {
-    return { score: color * evaluateBoard(board, AI), column: null };
-  }
-  
-  let bestScore = -Infinity;
-  let bestColumn = validLocations[0];
-  for (let col of validLocations) {
-    const newBoard = makeMove(board, col, color === 1 ? AI : PLAYER);
-    let { score } = negamax(newBoard, depth - 1, -beta, -alpha, -color, startTime);
-    score = -score;
-    if (score > bestScore) {
-      bestScore = score;
-      bestColumn = col;
+  if (depth === 0 || terminal) {
+    if (terminal) {
+      if (winningMove(board, AI)) {
+        return { score: color * 1000000 };
+      } else if (winningMove(board, PLAYER)) {
+        return { score: color * -1000000 };
+      } else {
+        return { score: 0 };
+      }
+    } else {
+      return { score: color * evaluateBoard(board, AI) };
     }
-    alpha = Math.max(alpha, score);
-    if (alpha >= beta) break;
   }
-  return { score: bestScore, column: bestColumn };
+
+  const piece = color === 1 ? AI : PLAYER;
+  let bestScore = -Infinity;
+  let bestMoves = [];
+
+  for (let col of validLocations) {
+    const newBoard = makeMove(board, col, piece);
+    const newScore = -negamax(newBoard, depth - 1, -beta, -alpha, -color).score;
+
+    if (newScore > bestScore) {
+      bestScore = newScore;
+      bestMoves = [col]; // Chỉ giữ lại nước đi tốt nhất mới
+    } else if (newScore === bestScore) {
+      bestMoves.push(col); // Thêm vào danh sách nước đi ngang điểm
+    }
+
+    alpha = Math.max(alpha, newScore);
+    if (alpha >= beta) break; // Cắt tỉa alpha-beta
+  }
+
+  let bestColumn = bestMoves[Math.floor(Math.random() * bestMoves.length)];
+  return { column: bestColumn, score: bestScore };
 }
 
-function getBestMove(board) {
-  let bestMove = null;
-  const startTime = Date.now();
-  for (let depth = 1; depth <= MAX_DEPTH; depth++) {
-    let result = negamax(board, depth, -Infinity, Infinity, 1, startTime);
-    if (Date.now() - startTime > TIME_LIMIT) break;
-    bestMove = result.column;
-  }
-  return bestMove;
-}
 
-// Xuất hàm để sử dụng trong index.html
-window.getBestMove = getBestMove;
+// Hàm lấy nước đi tốt nhất cho AI với độ sâu tìm kiếm (mặc định = 4)
+// Dùng negamax với màu ban đầu là +1 (tức là lượt của AI)
+export function getBestMove(board, depth = 3) {
+  console.log("Normal bot is calculating best move...");
+  return negamax(board, depth, -Infinity, Infinity, 1).column;
+} 
