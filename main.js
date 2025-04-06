@@ -1,6 +1,7 @@
 // main.js
-import { getBestMove as getHardMove } from "./bot_hard.js";
-import { getBestMove as getMediumMove } from "./normal_bot.js";
+import { getBestMove as getHardMove } from "./Hard_bot.js";
+import { getBestMove as getMediumMove } from "./Medium_bot.js";
+import { getBestMove as getEasyMove } from "./Easy_bot.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const board = document.querySelector("#board");
@@ -104,11 +105,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const difficulty = computerDifficultySelect.value;
       console.log(difficulty);
       setTimeout(() => {
-        if (difficulty === "medium") {
-          makeNormalAIMove(getMediumMove);
+        if (difficulty === "easy") {
+          makeEasyAIMove(getEasyMove);
           // makeHardAIMove(getBestMoveHard);
-        } else if (difficulty === "hard") {
+        } else if (difficulty === "medium") {
           // makeNormalAIMove(getBestMoveNormal);
+          makeNormalAIMove(getMediumMove);
+        } else if (difficulty === "hard") {
           makeHardAIMove(getHardMove);
         }
       }, 200);
@@ -279,7 +282,29 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // Khởi tạo board và cập nhật kích thước board theo lựa chọn
+  // Hàm gọi AI cấp normal
+  const makeNormalAIMove = () => {
+    // Chuyển board 1D sang 2D để phù hợp với logic của normal_bot.js
+    const board2D = convertPiecesTo2D(pieces, boardWidth, boardHeight);
+    // Lấy cột nước đi tốt nhất từ bot normal (depth = 4 có thể thay đổi)
+    const moveColumn = getMediumMove(board2D, 4);
+    if (moveColumn >= 0 && moveColumn < boardWidth) {
+      onColumnClicked(moveColumn);
+    }
+  };
+
+  // Hàm gọi AI cấp hard
+  const makeHardAIMove = () => {
+    // Chuyển board 1D sang 2D để phù hợp với logic của bot_hard.js
+    const board2D = convertPiecesTo2D(pieces, boardWidth, boardHeight);
+    // Lấy cột nước đi tốt nhất từ bot_hard (depth = 5 có thể thay đổi)
+    const moveColumn = getHardMove(board2D, 5);
+    if (moveColumn >= 0 && moveColumn < boardWidth) {
+      onColumnClicked(moveColumn);
+    }
+  };
+
+  // Khởi tạo board và cấu hình board theo lựa chọn
   if (boardSizeSelect && board) {
     setBoardDimensions(boardSizeSelect.value);
     boardSizeSelect.addEventListener("change", () =>
