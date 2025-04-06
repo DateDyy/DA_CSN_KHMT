@@ -17,6 +17,56 @@ document.addEventListener("DOMContentLoaded", () => {
   const computerDifficultySelect = document.querySelector(
     "#computer-difficulty"
   );
+  const suggestButton = document.getElementById("suggestButton");
+
+  let suggestionCount = 0;
+  let suggestionLimit = 0;
+
+  function suggestBestMove() {
+    // Xác định giới hạn theo độ khó
+    const difficulty = computerDifficultySelect.value;
+
+    switch (difficulty) {
+      case "easy":
+        suggestionLimit = 5;
+        break;
+      case "medium":
+        suggestionLimit = 3;
+        break;
+      case "hard":
+        suggestionLimit = 1;
+        break;
+      default:
+        suggestionLimit = 0;
+    }
+
+    if (suggestionCount >= suggestionLimit) {
+      alert("Bạn đã sử dụng hết lượt gợi ý cho mức độ hiện tại.");
+      return;
+    }
+
+    // Tăng số lượt đã dùng
+    suggestionCount++;
+
+    const board2D = convertPiecesTo2D(pieces, boardWidth, boardHeight);
+    const suggestedColumn = getHardMove(board2D, 5);
+
+    if (suggestedColumn < 0 || suggestedColumn >= boardWidth) return;
+
+    for (let row = 0; row < boardHeight; row++) {
+      const index = row * boardWidth + suggestedColumn;
+      const cell = board.children[index];
+      cell.classList.add("suggestion-blink");
+    }
+
+    setTimeout(() => {
+      for (let row = 0; row < boardHeight; row++) {
+        const index = row * boardWidth + suggestedColumn;
+        const cell = board.children[index];
+        cell.classList.remove("suggestion-blink");
+      }
+    }, 2000);
+  }
 
   board.classList.add("disabled"); // Vô hiệu hóa bàn cờ ban đầu
 
@@ -24,6 +74,8 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("start-game").addEventListener("click", function () {
     document.getElementById("turn-notification").style.visibility = "visible";
     board.classList.remove("visibi"); // Vô hiệu hóa bàn cờ ban đầu
+    suggestButton.addEventListener("click", suggestBestMove);
+    suggestionCount = 0;
   });
 
   // Sự kiện khi đóng options

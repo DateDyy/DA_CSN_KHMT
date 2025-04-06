@@ -12,11 +12,14 @@
   <link href="board_rule.css" rel="stylesheet">
   <link rel="icon" type="image/png" href="img/four-in-line.png">
 
+
+
 </head>
 
-<body style="background-image: url('/img/BG_Wood.png'); background-repeat: no-repeat; background-size: cover; background-position: center;">
+<body
+  style="background-image: url('/img/BG_Wood.png'); background-repeat: no-repeat; background-size: cover; background-position: center;">
   <h1>Four In Line</h1>
-  
+
   <button id="rules-button">How to Play</button>
   <div id="rules-container">
     <h2>How to Play</h2>
@@ -28,12 +31,12 @@
   </div>
 
   <script>
-    document.getElementById("rules-button").addEventListener("click", function() {
+    document.getElementById("rules-button").addEventListener("click", function () {
       const rulesContainer = document.getElementById("rules-container");
       rulesContainer.style.display = (rulesContainer.style.display === "none" || rulesContainer.style.display === "") ? "block" : "none";
     });
   </script>
-  
+
   <div id="turn-notification">
     <div class="notification-content">
       <div class="player-indicator"></div>
@@ -43,6 +46,11 @@
 
   <div id="new-game-container">
     <button id="new-game">New Game</button>
+    <button id="suggestButton" title="Gợi ý nước đi" style="background: none; border: none; cursor: pointer;">
+      <img src="./img/lightbulb-32.png" alt="Suggest Move" id="suggestIcon" style="width: 32px; height: 32px;">
+    </button>
+
+
     <div id="game-options" class="hidden">
       <h2>Game Options</h2>
       <label>Player 1:
