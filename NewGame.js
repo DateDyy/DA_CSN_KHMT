@@ -52,11 +52,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let botFile = "";
     if (difficulty === "easy") {
-        botFile = "easy_bot.js";
+        botFile = "Easy_bot.js";
     } else if (difficulty === "medium") {
-        botFile = "normal_bot.js";
+        botFile = "Medium_bot.js";
     } else if (difficulty === "hard") {
-        botFile = "bot_hard.js";
+        botFile = "Hard_bot.js";
     }
 
     if (!botFile) return;
@@ -178,15 +178,15 @@ startGameButton.addEventListener("click", () => {
     const boardBackgrounds = {
       blue: {
         backgroundImage: "url('img/BG_Blue.jpg')",
-        boardColor: "rgb(23, 28, 158)",
+        boardColor: "rgb(41, 95, 211)",
       },
       green: {
         backgroundImage: "url('img/BG_Green.jpg')",
-        boardColor: "rgb(44, 80, 32)",
+        boardColor: "rgb(84, 187, 85)",
       },
       wood: {
         backgroundImage: "url('img/BG_Wood.png')",
-        boardColor: "rgb(248, 114, 26)",
+        boardColor: "rgb(238, 125, 50)",
       },
     };
 
