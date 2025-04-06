@@ -52,11 +52,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let botFile = "";
     if (difficulty === "easy") {
-        botFile = "easy_bot.js";
+        botFile = "Easy_bot.js";
     } else if (difficulty === "medium") {
-        botFile = "normal_bot.js";
+        botFile = "Medium_bot.js";
     } else if (difficulty === "hard") {
-        botFile = "bot_hard.js";
+        botFile = "Hard_bot.js";
     }
 
     if (!botFile) return;

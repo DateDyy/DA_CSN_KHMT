@@ -1,6 +1,6 @@
 // main.js
 import { getBestMove as getHardMove } from "./Hard_bot.js";
-import { getBestMove as getMediumMove } from "./normal_bot.js";
+import { getBestMove as getMediumMove } from "./Medium_bot.js";
 import { getBestMove as getEasyMove } from "./Easy_bot.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(() => {
         if (difficulty === "easy") {
           makeEasyAIMove();
-        } else if (difficulty === "normal") {
+        } else if (difficulty === "medium") {
           makeMediumAIMove();
         } else if (difficulty === "hard") {
           makeHardAIMove();
