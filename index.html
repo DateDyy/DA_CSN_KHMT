@@ -7,7 +7,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Four In Line</title>
   <link href="styles.css" rel="stylesheet">
-  <link href="winning.css" rel="stylesheet">
   <link href="NewGame.css" rel="stylesheet">
   <link href="board_rule.css" rel="stylesheet">
   <link rel="icon" type="image/png" href="img/four-in-line.png">
@@ -70,9 +69,11 @@
         <select id="player2-color">
           <option value="yellow">Yellow</option>
           <option value="red">Red</option>
+
         </select>
       </label>
       <br>
+
       <label>Computer Difficulty:
         <select id="computer-difficulty">
           <option value="easy">Easy</option>
@@ -81,6 +82,7 @@
         </select>
       </label>
       <br>
+
       <label>Board Size:
         <select id="board-size">
           <option value="7x6">7x6</option>
@@ -91,9 +93,9 @@
       <br>
       <label>Board Background:
         <select id="board-bg">
-          <option value="wood">Wood</option>
           <option value="blue">Blue</option>
           <option value="green">Green</option>
+          <option value="wood">Wood</option>
         </select>
       </label>
       <br>
@@ -101,15 +103,14 @@
       <button id="close-options">Close</button>
     </div>
   </div>
-  <div id="board"></div>
+  <div></div>
+  <div id="board">
+  </div>
   <div id="modal-container">
     <div id="modal-content">
       <h1 style="color: black;">Game Over</h1>
       <p id="modal-message">The game is a draw</p>
-      <div id="modal-buttons">
-        <button id="reset">Play Again?</button>
-        <button id="review">Review results?</button>
-      </div>
+      <button id="reset">Play Again?</button>
     </div>
   </div>
   <script type="module" src="main.js"></script>
