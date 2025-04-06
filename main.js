@@ -68,14 +68,31 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 2000);
   }
 
+  function updateSuggestButtonVisibility() {
+    const player1Type = player1TypeSelect.value;
+    const player2Type = player2TypeSelect.value;
+
+    // Show suggest button if at least one player is computer
+    if (player1Type === "computer" || player2Type === "computer") {
+      suggestButton.style.visibility = "visible";
+      // Reset suggestion count when player types change
+      suggestionCount = 0;
+    } else {
+      // Hide suggest button if both players are human
+      suggestButton.style.visibility = "hidden";
+    }
+  }
+
   board.classList.add("disabled"); // Vô hiệu hóa bàn cờ ban đầu
 
   // Sự kiện khi bắt đầu trò chơi
   document.getElementById("start-game").addEventListener("click", function () {
     document.getElementById("turn-notification").style.visibility = "visible";
     board.classList.remove("visibi"); // Vô hiệu hóa bàn cờ ban đầu
-    suggestButton.addEventListener("click", suggestBestMove);
-    suggestionCount = 0;
+    updateSuggestButtonVisibility();
+    if (suggestButton.style.visibility === "visible") {
+      suggestButton.addEventListener("click", suggestBestMove);
+    }
   });
 
   // Sự kiện khi đóng options
@@ -159,6 +176,9 @@ document.addEventListener("DOMContentLoaded", () => {
     playerTurn = FIRST_TURN;
     hoverColumn = -1;
     animating = false;
+
+    // Update suggest button visibility on board initialization
+    updateSuggestButtonVisibility();
 
     for (let i = 0; i < boardWidth * boardHeight; i++) {
       const cell = document.createElement("div");
@@ -429,4 +449,14 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     console.error("#board-size or #board not found in the document.");
   }
+
+  // Add event listeners to player type selects
+  player1TypeSelect.addEventListener("change", updateSuggestButtonVisibility);
+  player2TypeSelect.addEventListener("change", updateSuggestButtonVisibility);
+
+  // Make sure the suggest button is initially hidden when the page loads
+  suggestButton.style.visibility = "hidden";
+
+  // Initial check for suggest button visibility
+  updateSuggestButtonVisibility();
 });
