@@ -1,6 +1,7 @@
 // main.js
-import { getBestMove } from "./bot_hard.js";
-import { getBestMove as  getBestMove_nor } from "./normal_bot.js";
+import { getBestMove as getHardMove } from "./Hard_bot.js";
+import { getBestMove as getMediumMove } from "./Medium_bot.js";
+import { getBestMove as getEasyMove } from "./Easy_bot.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const board = document.querySelector("#board");
@@ -147,12 +148,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const difficulty = computerDifficultySelect.value;
       console.log(difficulty);
       setTimeout(() => {
-        if (difficulty === "medium") {
-          makeNormalAIMove(getBestMove_nor);
+        if (difficulty === "easy") {
+          makeEasyAIMove(getEasyMove);
           // makeHardAIMove(getBestMoveHard);
-        } else if (difficulty === "hard") {
+        } else if (difficulty === "medium") {
           // makeNormalAIMove(getBestMoveNormal);
-          makeHardAIMove(getBestMove);
+          makeNormalAIMove(getMediumMove);
+        } else if (difficulty === "hard") {
+          makeHardAIMove(getHardMove);
         }
       }, 200);
     }
@@ -331,18 +334,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
     return null;
   };
-  
-// Hàm gọi AI cấp normal
-const makeNormalAIMove = () => {
-  // Chuyển board 1D sang 2D để phù hợp với logic của normal_bot.js
-  const board2D = convertPiecesTo2D(pieces, boardWidth, boardHeight);
-  // Lấy cột nước đi tốt nhất từ bot normal (depth = 4 có thể thay đổi)
-  const moveColumn = getBestMove_nor(board2D, 4);
-  if (moveColumn >= 0 && moveColumn < boardWidth) {
-    onColumnClicked(moveColumn);
-  }
-};
+  const makeEasyAIMove = () => {
+    // Chuyển board 1D sang 2D
+    const board2D = convertPiecesTo2D(pieces, boardWidth, boardHeight);
 
+    // Gọi bot cấp Easy (depth = 2)
+    const moveColumn = getEasyMove(board2D, 2);
+
+    // Thực hiện nước đi nếu hợp lệ
+    if (moveColumn >= 0 && moveColumn < boardWidth) {
+      onColumnClicked(moveColumn);
+    }
+  };
+
+  // Hàm gọi AI cấp normal
+  const makeNormalAIMove = () => {
+    // Chuyển board 1D sang 2D để phù hợp với logic của normal_bot.js
+    const board2D = convertPiecesTo2D(pieces, boardWidth, boardHeight);
+    // Lấy cột nước đi tốt nhất từ bot normal (depth = 4 có thể thay đổi)
+    const moveColumn = getMediumMove(board2D, 4);
+    if (moveColumn >= 0 && moveColumn < boardWidth) {
+      onColumnClicked(moveColumn);
+    }
+  };
 
   // Hàm gọi AI cấp hard
   const makeHardAIMove = () => {
