@@ -40,41 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const turnMessage = document.getElementById("turn-message");
   const playerIndicator = document.querySelector(".player-indicator");
 
-  // ----- 4. CORE GAME LOGIC FUNCTIONS -----
-
-  /**
-   * Converts 1D piece array to 2D board representation
-   */
-  function convertPiecesTo2D(pieces, boardWidth, boardHeight) {
-    let board2D = [];
-    for (let row = 0; row < boardHeight; row++) {
-      let rowArr = [];
-      for (let col = 0; col < boardWidth; col++) {
-        rowArr.push(pieces[row * boardWidth + col]);
-      }
-      board2D.push(rowArr);
-    }
-    return board2D;
-  }
-
-  /**
-   * Gets the available row in a given column
-   */
-  const getAvailableRowInColumn = (column) => {
-    for (let row = boardHeight - 1; row >= 0; row--) {
-      if (pieces[row * boardWidth + column] === 0) return row;
-    }
-    return -1;
-  };
-
-  /**
-   * Checks if a player has won and returns winning positions
-   */
-  const hasPlayerWon = (player) => {
-    for (let row = 0; row < boardHeight; row++) {
-      for (let col = 0; col < boardWidth; col++) {
-        const index = row * boardWidth + col;
-        if (pieces[index] !== player) continue;
 
         // Check horizontal win
         if (
