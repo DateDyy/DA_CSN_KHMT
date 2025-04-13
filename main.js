@@ -20,7 +20,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let animating = false;
   let suggestionCount = 0;
   let suggestionLimit = 0;
-  let gameStarted = false;
 
   // ----- 3. DOM ELEMENTS -----
   const board = document.querySelector("#board");
@@ -360,10 +359,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     switch (difficulty) {
       case "easy":
-        suggestionLimit = 5;
+        suggestionLimit = 4;
         break;
       case "medium":
-        suggestionLimit = 3;
+        suggestionLimit = 2;
         break;
       case "hard":
         suggestionLimit = 1;
@@ -381,7 +380,7 @@ document.addEventListener("DOMContentLoaded", () => {
     suggestionCount++;
 
     const board2D = convertPiecesTo2D(pieces, boardWidth, boardHeight);
-    const suggestedColumn = getHardMove(board2D, 5);
+    const suggestedColumn = getHardMove(board2D, 7);
 
     if (suggestedColumn < 0 || suggestedColumn >= boardWidth) return;
 
@@ -447,7 +446,7 @@ document.addEventListener("DOMContentLoaded", () => {
    */
   const makeHardAIMove = () => {
     const board2D = convertPiecesTo2D(pieces, boardWidth, boardHeight);
-    const moveColumn = getHardMove(board2D, 7);
+    const moveColumn = getHardMove(board2D, 8);
 
     if (moveColumn >= 0 && moveColumn < boardWidth) {
       onColumnClicked(moveColumn);
