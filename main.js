@@ -22,26 +22,37 @@ document.addEventListener("DOMContentLoaded", () => {
   let suggestionCount = 0;
   let suggestionLimit = 0;
 
+  function showSuggestionMessage(message) {
+    const msgBox = document.getElementById("suggestionMessage");
+    msgBox.textContent = message;
+    msgBox.classList.add("show");
+  
+    setTimeout(() => {
+      msgBox.classList.remove("show");
+    }, 3000); // Hiển thị 3 giây rồi tự ẩn
+  }
+  
+
   function suggestBestMove() {
     // Xác định giới hạn theo độ khó
     const difficulty = computerDifficultySelect.value;
 
     switch (difficulty) {
       case "easy":
-        suggestionLimit = 5;
+        suggestionLimit = 7;
         break;
       case "medium":
-        suggestionLimit = 3;
+        suggestionLimit = 5;
         break;
       case "hard":
-        suggestionLimit = 1;
+        suggestionLimit = 2;
         break;
       default:
         suggestionLimit = 0;
     }
 
     if (suggestionCount >= suggestionLimit) {
-      alert("Bạn đã sử dụng hết lượt gợi ý cho mức độ hiện tại.");
+      showSuggestionMessage("⚠️ Bạn đã sử dụng hết lượt gợi ý!");
       return;
     }
 
@@ -53,40 +64,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (suggestedColumn < 0 || suggestedColumn >= boardWidth) return;
 
-    for (let row = 0; row < boardHeight; row++) {
-      const index = row * boardWidth + suggestedColumn;
-      const cell = board.children[index];
-      cell.classList.add("suggestion-blink");
+  // Tìm hàng trống cao nhất trong cột được gợi ý
+  let targetRow = -1;
+  for (let row = boardHeight - 1; row >= 0; row--) {
+    if (board2D[row][suggestedColumn] === 0) {
+      targetRow = row;
+      break;
     }
-
-    setTimeout(() => {
-      for (let row = 0; row < boardHeight; row++) {
-        const index = row * boardWidth + suggestedColumn;
-        const cell = board.children[index];
-        cell.classList.remove("suggestion-blink");
-      }
-    }, 2000);
   }
 
+  if (targetRow === -1) return; // Không còn ô trống
+
+  const index = targetRow * boardWidth + suggestedColumn;
+  const cell = board.children[index];
+  cell.classList.add("suggestion-blink");
+
+  setTimeout(() => {
+    cell.classList.remove("suggestion-blink");
+  }, 2000);
+  }
+
+  let isGameRunning = false; //để kiểm soát khi nào được phép hiển thị nút gợi ý.
+  
   function updateSuggestButtonVisibility() {
     const player1Type = player1TypeSelect.value;
     const player2Type = player2TypeSelect.value;
-
-    // Show suggest button if at least one player is computer
-    if (player1Type === "computer" || player2Type === "computer") {
+  
+    if (isGameRunning && (player1Type === "computer" || player2Type === "computer")) {
       suggestButton.style.visibility = "visible";
-      // Reset suggestion count when player types change
       suggestionCount = 0;
     } else {
-      // Hide suggest button if both players are human
       suggestButton.style.visibility = "hidden";
     }
   }
-
+  
   board.classList.add("disabled"); // Vô hiệu hóa bàn cờ ban đầu
 
   // Sự kiện khi bắt đầu trò chơi
   document.getElementById("start-game").addEventListener("click", function () {
+    isGameRunning = true; // ✅ Bật trạng thái game
     document.getElementById("turn-notification").style.visibility = "visible";
     board.classList.remove("visibi"); // Vô hiệu hóa bàn cờ ban đầu
     updateSuggestButtonVisibility();
@@ -96,19 +112,20 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Sự kiện khi đóng options
-  document
-    .getElementById("close-options")
-    .addEventListener("click", function () {
-      document.getElementById("turn-notification").style.visibility = "hidden";
-      board.classList.add("visibi"); // Vô hiệu hóa bàn cờ ban đầu
-      initializeBoard();
-    });
+  document.getElementById("close-options").addEventListener("click", function () {
+    isGameRunning = false; //Tắt trạng thái game
+    document.getElementById("turn-notification").style.visibility = "hidden";
+    board.classList.add("visibi");
+    suggestButton.style.visibility = "hidden";
+    initializeBoard();
+  });
 
   // Sự kiện khi click xem kết quả
   reviewButton.addEventListener("click", () => {
     modalContainer.style.display = "none"; // Ẩn bảng modal-container khi bấm Review results
     board.classList.add("disabled"); // Khóa bàn cờ
     document.getElementById("turn-notification").style.visibility = "hidden";
+    suggestButton.style.visibility = "hidden";
   });
 
   // Số cột và hàng mặc định

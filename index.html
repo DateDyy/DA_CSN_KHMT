@@ -28,6 +28,11 @@
     <p>3. The goal is to connect four pieces in a row, column, or diagonal.</p>
     <p>4. The game ends when a player wins or the board is full.</p>
     <p>5. You can play against another player or an AI (Easy, Medium, Hard).</p>
+    <p><em>6.💡In AI mode, you can use the move suggestion feature:</em><br>
+      <em>• Easy: up to 7 suggestions</em><br>
+      <em>• Medium: up to 5 suggestions</em><br>
+      <em>• Hard: up to 2 suggestions</em>
+   </p>
   </div>
 
   <script>
@@ -43,6 +48,8 @@
       <span id="turn-message">Player 1's Turn</span>
     </div>
   </div>
+
+  <div id="suggestionMessage" class="message-box hidden"></div>
 
   <div id="new-game-container">
     <button id="new-game">New Game</button>

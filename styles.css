@@ -20,7 +20,6 @@
 *::before {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
   font-family: "Courier New", Courier, monospace;
 }
 
@@ -185,11 +184,19 @@ h1 {
 }
 
 .piece[data-player="1"] {
-  background: radial-gradient(circle at 30% 30%, #ff6b6b, #cc0000);
+  background: radial-gradient(
+    circle at 30% 30%,
+    color-mix(in srgb, var(--player1-color) 70%, white),
+    var(--player1-color)
+  );
 }
 
 .piece[data-player="2"] {
-  background: radial-gradient(circle at 30% 30%, #ffff80, #cccc00);
+  background: radial-gradient(
+    circle at 30% 30%,
+    color-mix(in srgb, var(--player2-color) 70%, white),
+    var(--player2-color)
+  );
 }
 
 .piece[data-placed="false"] {
@@ -253,7 +260,7 @@ h1 {
 }
 
 #modal-message[data-winner="2"] {
-  color: var(--player2-color, rgba(242, 255, 0, 0.933));
+  color: var(--player2-color, rgba(232, 244, 0, 0.933));
   font-weight: bold;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
 }
@@ -311,21 +318,26 @@ h1 {
   transform: translateY(1px);
   box-shadow: 0 2px 0 rgba(15, 60, 5, 0.8);
 }
-/* Hiệu ứng nhấp nháy nâng cao */
-.suggestion-blink {
-  
-  animation: clean-blink 1.2s infinite;
-}
 
-@keyframes clean-blink {
-  0%,
-  100% {
-    box-shadow: 0 0 12px 4px rgba(100, 255, 100, 0.7);
+/* Hiệu ứng nhấp nháy nâng cao */
+@keyframes suggestionBlink {
+  0% {
+
+    background-color: rgba(174, 0, 255, 0.4);
   }
   50% {
-    box-shadow: 0 0 20px 8px rgba(80, 255, 80, 0.9);
+    background-color: rgba(247, 0, 255, 0.7);
+  }
+  100% {
+    background-color: rgba(238, 0, 255, 0.4);
   }
 }
+
+.suggestion-blink {
+  animation: suggestionBlink 2s ease-in-out infinite;
+  border-radius: 50%;
+}
+
 
 #suggestButton {
   background: none;
@@ -453,3 +465,26 @@ h1 {
     width: 90%;
   }
 }
+
+.message-box {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ffcc00;
+  color: #333;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out;
+  z-index: 1000;
+}
+
+.message-box.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
