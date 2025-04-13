@@ -90,25 +90,17 @@ function winningMove(board, piece) {
 
 // Hàm quét một cửa sổ (window) gồm 4 ô và tính điểm cho cửa sổ đó
 function scoreWindow(window, piece) {
-  let score = 0;
   const opponent = piece === AI ? PLAYER : AI;
   const countPiece = window.filter((cell) => cell === piece).length;
   const countOpponent = window.filter((cell) => cell === opponent).length;
   const countEmpty = window.filter((cell) => cell === EMPTY).length;
 
-  if (countPiece === 4) {
-    score += 100;
-  } else if (countPiece === 3 && countEmpty === 1) {
-    score += 5;
-  } else if (countPiece === 2 && countEmpty === 2) {
-    score += 2;
-  }
+  if (countPiece === 4) return 1000;
+  if (countPiece === 3 && countEmpty === 1) return 50;
+  if (countPiece === 2 && countEmpty === 2) return 10;
+  if (countOpponent === 3 && countEmpty === 1) return -80;
 
-  if (countOpponent === 3 && countEmpty === 1) {
-    score -= 4;
-  }
-
-  return score;
+  return 0;
 }
 
 // Hàm đánh giá board hiện tại cho AI theo nhiều tiêu chí
@@ -126,8 +118,18 @@ function evaluateBoard(board, piece) {
   for (let r = 0; r < rows; r++) {
     centerArray.push(board[r][centerCol]);
   }
-  const centerCount = centerArray.filter((cell) => cell === piece).length;
-  score += centerCount * 3;
+  const centerCols = [
+    Math.floor(cols / 2) - 1,
+    Math.floor(cols / 2),
+    Math.floor(cols / 2) + 1,
+  ];
+  let centerScore = 0;
+  for (let r = 0; r < rows; r++) {
+    for (let c of centerCols) {
+      if (board[r][c] === piece) centerScore += 2;
+    }
+  }
+  score += centerScore;
 
   // Hàng ngang
   for (let r = 0; r < rows; r++) {
@@ -174,10 +176,10 @@ function evaluateBoard(board, piece) {
 }
 
 // Kiểm tra trạng thái kết thúc của board: chiến thắng hoặc board đầy
-function isTerminalNode(board) {
+function isTerminalNode(board, piece) {
   return (
-    winningMove(board, PLAYER) ||
-    winningMove(board, AI) ||
+    winningMove(board, piece) ||
+    winningMove(board, piece === AI ? PLAYER : AI) ||
     getValidLocations(board).length === 0
   );
 }
@@ -219,11 +221,9 @@ function negamax(board, depth, alpha, beta, color) {
   }
   const piece = color === 1 ? AI : PLAYER;
   validLocations.sort((a, b) => {
-    const boardA = makeMove(board, a, piece);
-    const boardB = makeMove(board, b, piece);
-    return (
-      color * evaluateBoard(boardB, AI) - color * evaluateBoard(boardA, AI)
-    );
+    const scoreA = evaluateBoard(makeMove(board, a, piece), AI);
+    const scoreB = evaluateBoard(makeMove(board, b, piece), AI);
+    return color * (scoreB - scoreA);
   });
 
   let value = -Infinity;
