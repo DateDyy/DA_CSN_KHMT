@@ -38,13 +38,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     switch (difficulty) {
       case "easy":
-        suggestionLimit = 7;
-        break;
-      case "medium":
         suggestionLimit = 5;
         break;
+      case "medium":
+        suggestionLimit = 3;
+        break;
       case "hard":
-        suggestionLimit = 2;
+        suggestionLimit = 1;
         break;
       default:
         suggestionLimit = 0;
