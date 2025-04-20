@@ -1,6 +1,6 @@
 :root {
   --boardColor: rgb(248, 114, 26); /* Base orange color */
-  --boardBackgroundImage: url('/img/BG_Wood.png');
+  --boardBackgroundImage: url('/img/BG_Green.jpg');
   --board-cols: 7;
   --board-rows: 6;
   --cell-size: 10vmin;
