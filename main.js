@@ -1,5 +1,5 @@
 // main.js
-import { getBestMove as getHardMove } from "./Hard_bot.js";
+import { getBestMove as getHardMove, getValidLocations as getValidLocations } from "./Hard_bot.js";
 import { getBestMove as getMediumMove } from "./Medium_bot.js";
 import { getBestMove as getEasyMove } from "./Easy_bot.js";
 
@@ -38,13 +38,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     switch (difficulty) {
       case "easy":
-        suggestionLimit = 7;
-        break;
-      case "medium":
         suggestionLimit = 5;
         break;
+      case "medium":
+        suggestionLimit = 3;
+        break;
       case "hard":
-        suggestionLimit = 2;
+        suggestionLimit = 1;
         break;
       default:
         suggestionLimit = 0;
@@ -452,14 +452,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Hàm gọi AI cấp hard
   const makeHardAIMove = () => {
-    // Chuyển board 1D sang 2D để phù hợp với logic của bot_hard.js
-    const board2D = convertPiecesTo2D(pieces, boardWidth, boardHeight);
-    // Lấy cột nước đi tốt nhất từ bot_hard (depth = 5 có thể thay đổi)
-    const moveColumn = getHardMove(board2D, 7);
-    if (moveColumn >= 0 && moveColumn < boardWidth) {
-      onColumnClicked(moveColumn);
-    }
-  };
+  const board2D = convertPiecesTo2D(pieces, boardWidth, boardHeight);
+  const validMoves = getValidLocations(board2D).length;
+  const moveColumn = getHardMove(board2D, validMoves);
+  
+  if (moveColumn >= 0 && moveColumn < boardWidth) {
+    onColumnClicked(moveColumn);
+  }
+};
 
   // Khởi tạo board và cấu hình board theo lựa chọn
   if (boardSizeSelect && board) {
