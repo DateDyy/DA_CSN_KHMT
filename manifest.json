@@ -13,13 +13,13 @@
 "orientation": "any",
 "icons": [
     {
-        "src": "https://www.pwabuilder.com/assets/icons/icon_512.png",
+        "src": "/img/four-in-line.png",
         "sizes": "512x512",
         "type": "image/png",
         "purpose": "maskable"
     },
     {
-        "src": "https://www.pwabuilder.com/assets/icons/icon_192.png",
+        "src": "/img/four-in-line.png",
         "sizes": "192x192",
         "type": "image/png",
         "purpose": "any"
@@ -27,7 +27,7 @@
 ],
 "screenshots": [
     {
-        "src": "https://www.pwabuilder.com/assets/screenshots/screen1.png",
+        "src": "/img/four-in-line.png",
         "sizes": "2880x1800",
         "type": "image/png",
         "description": "A screenshot of the home page"
