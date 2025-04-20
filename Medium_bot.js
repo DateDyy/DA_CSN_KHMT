@@ -1,4 +1,4 @@
-// normal_bot.js
+// Medium_bot.js
 
 // Các hằng số cho Connect 4 (vẫn giữ các hằng số cho EMPTY, PLAYER, AI)
 const EMPTY = 0;
