@@ -1,5 +1,5 @@
 :root {
-  --boardColor: rgb(248, 114, 26); /* Base orange color */
+  --boardColor: #f8721a; /* Base orange color */
   --board-cols: 7;
   --board-rows: 6;
   --cell-size: 10vmin;
@@ -11,8 +11,8 @@
   --shadow-medium: 0 5px 15px rgba(0, 0, 0, 0.2);
   --shadow-dark: 0 10px 30px rgba(0, 0, 0, 0.4);
   --transition-normal: all 0.3s ease;
-  --player1-color: rgba(235, 16, 16, 0.916);
-  --player2-color: rgba(242, 255, 0, 0.933);
+  --player1-color: #eb1010ea;
+  --player2-color: #f2ff00ee;
 }
 
 *,
@@ -44,7 +44,7 @@ body {
   top: 20%;
   transform: translateY(-50%);
   background-color: rgba(0, 0, 0, 0.8);
-  color: white;
+  color: #ffffff;
   padding: 15px 20px;
   border-radius: 0 12px 12px 0;
   z-index: 10;
@@ -52,7 +52,7 @@ body {
   box-shadow: var(--shadow-medium);
   visibility: hidden;
   backdrop-filter: blur(5px);
-  border-left: 4px solid lightskyblue;
+  border-left: 4px solid #87cefa;
 }
 
 .notification-content {
@@ -65,9 +65,9 @@ body {
   width: 25px;
   height: 25px;
   border-radius: 50%;
-  background-color: var(--player1-color, red);
-  box-shadow: inset -2px -2px 6px rgba(0, 0, 0, 0.3),
-    inset 2px 2px 6px rgba(255, 255, 255, 0.3);
+  background-color: var(--player1-color, #ff0000);
+  box-shadow: inset -2px -2px 6px #0000004d,
+    inset 2px 2px 6px #ffffff4d;
   transition: var(--transition-normal);
 }
 
@@ -95,7 +95,7 @@ h1 {
   border-radius: 16px;
   position: relative;
   transform: perspective(1000px) rotateX(5deg);
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 25px 50px #00000080;
   transition: transform 0.5s ease;
 }
 
@@ -110,7 +110,7 @@ h1 {
   animation: woodgrain 10s ease-in-out infinite;
   border-radius: 20px;
   z-index: -2;
-  box-shadow: 0 15px 30px rgb(0, 0, 0);
+  box-shadow: 0 15px 30px #000000;
 }
 
 #board::after {
@@ -122,7 +122,7 @@ h1 {
   height: 100%;
   background: radial-gradient(
     circle at top left,
-    rgba(255, 255, 255, 0.1),
+    #ffffff1a,
     transparent 70%
   );
   pointer-events: none;
@@ -133,21 +133,21 @@ h1 {
 #board:hover::after {
   background: radial-gradient(
     circle at center,
-    rgba(255, 255, 255, 0.1),
+    #ffffff1a,
     transparent
   );
-  box-shadow: 0 25px 35px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 25px 35px #00000099;
 }
 
 @keyframes woodgrain {
   0%,
   100% {
     background-position: 0% 50%;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 20px 40px #00000099;
   }
   50% {
     background-position: 100% 50%;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 25px 50px #000000b3;
   }
 }
 
@@ -177,8 +177,8 @@ h1 {
   border-radius: 50%;
   flex-grow: 1;
   margin: 5%;
-  box-shadow: inset -4px -4px 8px rgba(255, 255, 255, 0.5),
-    inset 4px 4px 8px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.5);
+  box-shadow: inset -4px -4px 8px #ffffff80,
+    inset 4px 4px 8px #0000004d, 0 4px 8px #00000080;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   z-index: 2;
 }
@@ -186,7 +186,7 @@ h1 {
 .piece[data-player="1"] {
   background: radial-gradient(
     circle at 30% 30%,
-    color-mix(in srgb, var(--player1-color) 70%, white),
+    color-mix(in srgb, var(--player1-color) 70%, #ffffff),
     var(--player1-color)
   );
 }
@@ -194,7 +194,7 @@ h1 {
 .piece[data-player="2"] {
   background: radial-gradient(
     circle at 30% 30%,
-    color-mix(in srgb, var(--player2-color) 70%, white),
+    color-mix(in srgb, var(--player2-color) 70%, #ffffff),
     var(--player2-color)
   );
 }
@@ -213,7 +213,7 @@ h1 {
   width: 100%;
   height: 100%;
   z-index: 100;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: #000000b3;
   backdrop-filter: blur(5px);
   padding-top: 15vh;
 }
@@ -224,7 +224,7 @@ h1 {
   max-width: 600px;
   margin: auto;
   padding: 3vmin;
-  background: rgba(255, 255, 255, 0.95);
+  background: #fffffff2;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -254,15 +254,15 @@ h1 {
 }
 
 #modal-message[data-winner="1"] {
-  color: var(--player1-color, rgba(235, 16, 16, 0.916));
+  color: var(--player1-color, #eb1010ea);
   font-weight: bold;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+  text-shadow: 1px 1px 1px #00000033;
 }
 
 #modal-message[data-winner="2"] {
-  color: var(--player2-color, rgba(232, 244, 0, 0.933));
+  color: var(--player2-color, #e8f400ee);
   font-weight: bold;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+  text-shadow: 1px 1px 1px #00000033;
 }
 
 #modal-buttons {
@@ -288,48 +288,48 @@ h1 {
 }
 
 #reset {
-  color: white;
-  background-color: rgba(220, 27, 9, 0.8);
-  box-shadow: 0 4px 0 rgba(180, 20, 5, 0.8);
+  color: #ffffff;
+  background-color: #dc1b09cc;
+  box-shadow: 0 4px 0 #b41405cc;
 }
 
 #reset:hover {
-  background-color: rgba(240, 50, 30, 0.9);
+  background-color: #f0321ee6;
   transform: translateY(-3px);
 }
 
 #reset:active {
   transform: translateY(1px);
-  box-shadow: 0 2px 0 rgba(180, 20, 5, 0.8);
+  box-shadow: 0 2px 0 #b41405cc;
 }
 
 #review {
-  color: white;
-  background-color: rgba(21, 81, 6, 0.8);
-  box-shadow: 0 4px 0 rgba(15, 60, 5, 0.8);
+  color: #ffffff;
+  background-color: #155106cc;
+  box-shadow: 0 4px 0 #0f3c05cc;
 }
 
 #review:hover {
-  background-color: rgba(30, 100, 10, 0.9);
+  background-color: #1e640ae6;
   transform: translateY(-3px);
 }
 
 #review:active {
   transform: translateY(1px);
-  box-shadow: 0 2px 0 rgba(15, 60, 5, 0.8);
+  box-shadow: 0 2px 0 #0f3c05cc;
 }
 
 /* Hiệu ứng nhấp nháy nâng cao */
 @keyframes suggestionBlink {
   0% {
 
-    background-color: rgba(174, 0, 255, 0.4);
+    background-color: #ae00ff66;
   }
   50% {
-    background-color: rgba(247, 0, 255, 0.7);
+    background-color: #f700ffb3;
   }
   100% {
-    background-color: rgba(238, 0, 255, 0.4);
+    background-color: #ee00ff66;
   }
 }
 
@@ -369,7 +369,7 @@ h1 {
 }
 
 #suggestButton:hover img {
-  filter: brightness(1.3) drop-shadow(0 0 5px rgba(255, 255, 0, 0.7));
+  filter: brightness(1.3) drop-shadow(0 0 5px #ffff00b3);
   transform: scale(1.15) rotate(10deg);
 }
 
@@ -476,7 +476,7 @@ h1 {
   padding: 12px 20px;
   border-radius: 8px;
   font-weight: bold;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 10px #00000033;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease-in-out;
