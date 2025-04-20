@@ -85,9 +85,44 @@ function winningMove(board, piece) {
 
 // Hàm đánh giá đơn giản
 function evaluateBoard(board, piece) {
-  if (winningMove(board, AI)) return 100;
-  if (winningMove(board, PLAYER)) return -100;
-  return Math.floor(Math.random() * 10); // Điểm ngẫu nhiên để bot không quá mạnh
+  const opponent = piece === AI ? PLAYER : AI;
+
+  if (winningMove(board, piece)) return 100;
+  if (winningMove(board, opponent)) return -100;
+
+  // Ưu tiên 3 quân liên tiếp
+  let score = 0;
+
+  // Kiểm tra các hàng để tìm các đoạn có 2-3 quân
+  for (let r = 0; r < board.length; r++) {
+    for (let c = 0; c < board[0].length - 3; c++) {
+      let window = board[r].slice(c, c + 4);
+      score += evaluateWindow(window, piece);
+    }
+  }
+
+  // Kiểm tra cột
+  for (let c = 0; c < board[0].length; c++) {
+    for (let r = 0; r < board.length - 3; r++) {
+      let window = [board[r][c], board[r + 1][c], board[r + 2][c], board[r + 3][c]];
+      score += evaluateWindow(window, piece);
+    }
+  }
+
+  return score;
+}
+function evaluateWindow(window, piece) {
+  const opponent = piece === AI ? PLAYER : AI;
+  let score = 0;
+  let countPiece = window.filter(cell => cell === piece).length;
+  let countEmpty = window.filter(cell => cell === EMPTY).length;
+  let countOpponent = window.filter(cell => cell === opponent).length;
+
+  if (countPiece === 3 && countEmpty === 1) score += 5;     // cơ hội thắng
+  else if (countPiece === 2 && countEmpty === 2) score += 2; // thiết lập thế
+  if (countOpponent === 3 && countEmpty === 1) score -= 4;   // chặn người chơi
+
+  return score;
 }
 
 // Lấy danh sách các cột hợp lệ
