@@ -1,36 +1,73 @@
 #rules-container {
     display: none;
-    position: -webkit-sticky;
+    position: fixed;
     top: 150px;
     right: 20px;
-    width: 250px;
-    padding: 10px;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    font-family: Arial, sans-serif;
-  }
-  #rules-container h2 {
+    width: 280px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    font-family: 'Roboto', sans-serif;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    z-index: 1000;
+    transform: translateY(-20px);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+#rules-container.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+#rules-container h2 {
     text-align: center;
-    font-size: 18px;
-  }
-  #rules-container p {
-    font-size: 14px;
-    line-height: 1.5;
-  }
-  #rules-button {
-    font-weight: bold;
-    position: absolute;
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: #333;
+}
+#rules-container p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 10px;
+    color: #555;
+}
+#rules-button {
+    position: fixed;
     top: 100px;
     right: 20px;
-    font-size: 18px;
-    padding: 10px 15px;
-    background-color: #fbf8f8;
-    color: rgb(7, 5, 5);
+    font-size: 1rem;
+    padding: 12px 20px;
+    background-color: #ffffff;
+    color: #333;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-  }
-  #rules-button:hover {
-    background-color:  #7f7c7c;
-  }
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    font-weight: 600;
+    z-index: 999;
+}
+#rules-button:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+#rules-button:active {
+    transform: translateY(0);
+}
+@media (max-width: 768px) {
+    #rules-container {
+        width: 90%;
+        max-width: 300px;
+        right: 5%;
+        top: 120px;
+        padding: 12px;
+    }
+    #rules-button {
+        top: 80px;
+        right: 5%;
+        font-size: 0.9rem;
+        padding: 10px 16px;
+    }
+}
