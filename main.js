@@ -3,6 +3,7 @@ import { getBestMove as getHardMove, getValidLocations as getValidLocations } fr
 import { getBestMove as getMediumMove } from "./Medium_bot.js";
 import { getBestMove as getEasyMove } from "./Easy_bot.js";
 
+
 document.addEventListener("DOMContentLoaded", () => {
   const board = document.querySelector("#board");
   const modalContainer = document.querySelector("#modal-container");
