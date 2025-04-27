@@ -1,7 +1,7 @@
 #rules-container {
     display: none;
-    position: absolute;
-    top: 80px;
+    position: -webkit-sticky;
+    top: 150px;
     right: 20px;
     width: 250px;
     padding: 10px;
@@ -21,7 +21,7 @@
   #rules-button {
     font-weight: bold;
     position: absolute;
-    top: 20px;
+    top: 100px;
     right: 20px;
     font-size: 18px;
     padding: 10px 15px;
