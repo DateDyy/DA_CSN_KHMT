@@ -66,8 +66,8 @@ function scoreWindow(window, piece) {
 }
 
 function evaluateBoard(board, piece) {
-  if (winningMove(board, AI)) return 1000000;
-  if (winningMove(board, PLAYER)) return -1000000;
+  if (winningMove(board, AI)) return 100000;
+  if (winningMove(board, PLAYER)) return -100000;
 
   let score = 0;
   const rows = board.length;
@@ -80,7 +80,7 @@ function evaluateBoard(board, piece) {
     if (board[r][centerCol] === piece) score += (rows - r) * 10;
   }
 
-  const evaluateWindows = (rowStart, colStart, rowStep, colStep, maxSteps) => {
+  const evaluateWindows = (rowStart, colStart, rowStep, colStep) => {
     for (let r = rowStart; r < rows; r++) {
       for (let c = colStart; c < cols; c++) {
         const window = [];
