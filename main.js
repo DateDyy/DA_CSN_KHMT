@@ -19,14 +19,16 @@ document.addEventListener("DOMContentLoaded", () => {
   );
   const suggestButton = document.getElementById("suggestButton");
 
+  // Thêm khai báo biến sounds và isSoundOn
+  const sounds = {
+    background: new Audio('./sounds/background.mp3'),
+    drop: new Audio('./sounds/drop.mp3')
+  };
+  let isSoundOn = true;
+
   let suggestionCount = 0;
   let suggestionLimit = 0;
-  const sounds = {
-    drop: new Audio('sounds/drop.wav'),
-    win: new Audio('sounds/win.wav'),
-    draw: new Audio('sounds/draw.wav'),
-    background: new Audio('sounds/background.mp3')
-  };
+
   function playSound(soundName, loop = false) {
     if (!isSoundOn || !sounds[soundName]) return;
     
@@ -499,6 +501,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initial check for suggest button visibility
   updateSuggestButtonVisibility();
 });
+const sounds = {
+  drop: new Audio('sounds/drop.wav'),
+  win: new Audio('sounds/win.wav'),
+  draw: new Audio('sounds/draw.wav'),
+  background: new Audio('sounds/background.mp3')
+};
+
 // Add error handling for audio files
 Object.values(sounds).forEach(sound => {
   sound.addEventListener('error', () => {
