@@ -1,0 +1,31 @@
+# File cấu hình môi trường
+.env
+.env.local
+
+# Thư mục dependencies
+node_modules/
+
+# File build tự động
+dist/
+build/
+*.tmp
+*.temp
+
+# File hệ thống
+.DS_Store
+Thumbs.db
+
+# File IDE
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# File log và cache
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

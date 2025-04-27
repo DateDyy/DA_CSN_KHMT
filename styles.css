@@ -380,93 +380,27 @@ h1 {
 #suggestButton:active img {
   transform: scale(0.95);
 }
-
 @media only screen and (max-width: 600px) {
-  /* Điều chỉnh body cho mobile: căn lề trên thay vì căn giữa */
-  body {
-    justify-content: flex-start;
-    padding-top: 15px;
+  :root {
+    --cell-size: 8vmin;
   }
-
-  /* Thay đổi kích thước và vị trí của tiêu đề */
-  h1 {
-    order: 1;
-    margin-top: 20px;
-    font-size: 4vh;
-    text-align: center;
-    width: 100%;
-  }
-
-  /* Đưa nút New Game lên trên thông báo lượt chơi */
-  #new-game-container {
-    order: 2;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    padding: 0 10px;
-    margin-bottom: 15px;
-  }
-
-  /* Đặt thông báo lượt chơi bên dưới nút New Game */
-  #turn-notification {
-    order: 3;
-    width: auto;
-    min-width: 45%;
-    margin: 10px auto;
-    position: relative;
-    left: 0;
-    top: 0;
-    transform: none;
-    border-radius: 12px;
-    border-left: none;
-    border-bottom: 3px solid #ffcc00;
-  }
-  .player-indicator {
-    width: 20px;
-    height: 20px;
-  }
-  #turn-message {
-    font-size: 14px;
-  }
-
-  /* Giữ thứ tự của board */
+  
   #board {
-    order: 4;
-    transform: perspective(1000px) rotateX(3deg);
+    padding-top: 5vmin;
+    transform: none;
   }
-
-  /* Responsive cho Game Options */
-  #game-options {
+  
+  #rules-container {
     width: 90%;
-    max-width: 90%;
-    padding: 20px;
-    max-height: 90vh;
-    overflow-y: auto;
+    right: 5%;
+    top: 80px;
   }
-
-  #modal-content {
-    width: 90%;
-    padding: 20px;
-    gap: 15px;
-  }
-
-  #modal-content h1 {
-    font-size: 3.5vh;
-    margin-bottom: 5px;
-  }
-
-  #modal-message {
-    font-size: 3vh;
-  }
-
-  #modal-buttons {
-    flex-direction: column;
-    gap: 15px;
-    align-items: center;
-  }
-
-  #modal-buttons button {
-    width: 90%;
+  
+  #rules-button {
+    top: 20px;
+    right: 5%;
+    font-size: 16px;
+    padding: 8px 12px;
   }
 }
 
@@ -490,5 +424,39 @@ h1 {
 .message-box.show {
   opacity: 1;
   pointer-events: auto;
+}
+
+@media (display-mode: standalone) {
+  body {
+    padding: 0;
+    overflow: hidden;
+  }
+  
+  #new-game-container {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+
+/* Thêm các breakpoint responsive */
+@media (max-width: 400px) {
+  :root {
+    --cell-size: 12vw;
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-height: 600px) and (orientation: landscape) {
+  #board {
+    padding-top: 2vh;
+  }
+  
+  #new-game-container {
+    position: fixed;
+    top: 0;
+    right: 0;
+  }
 }
 
