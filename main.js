@@ -22,6 +22,18 @@ document.addEventListener("DOMContentLoaded", () => {
   let suggestionCount = 0;
   let suggestionLimit = 0;
 
+  function playSound(soundName, loop = false) {
+    if (!isSoundOn || !sounds[soundName]) return;
+    
+    try {
+      sounds[soundName].currentTime = 0;
+      sounds[soundName].loop = loop;
+      sounds[soundName].play();
+    } catch (e) {
+      console.error('Audio play failed:', e);
+    }
+  }
+  playSound("background", true);
   function showSuggestionMessage(message) {
     const msgBox = document.getElementById("suggestionMessage");
     msgBox.textContent = message;
@@ -260,6 +272,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const onColumnClicked = (column) => {
+    playSound("drop");
     const availableRow = getAvailableRowInColumn(column);
     if (availableRow === -1) return;
     pieces[availableRow * boardWidth + column] = playerTurn;
@@ -481,3 +494,17 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initial check for suggest button visibility
   updateSuggestButtonVisibility();
 });
+const sounds = {
+  drop: new Audio('sounds/drop.wav'),
+  win: new Audio('sounds/win.wav'),
+  draw: new Audio('sounds/draw.wav'),
+  background: new Audio('sounds/background.mp3')
+};
+
+// Add error handling for audio files
+Object.values(sounds).forEach(sound => {
+  sound.addEventListener('error', () => {
+    console.error(`Failed to load sound: ${sound.src}`);
+  });
+});
+

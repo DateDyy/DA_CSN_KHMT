@@ -5,7 +5,11 @@ const ASSETS_TO_CACHE = [
   '/styles.css',
   '/main.js',
   '/NewGame.js',
-  '/img/four-in-line.png'
+  '/img/four-in-line.png',
+   '/img/sound-on.png',
+  '/img/sound-off.png',
+  '/sounds/background.mp3',
+  '/sounds/drop.mp3'
 ];
 
 self.addEventListener('install', (event) => {
