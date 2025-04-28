@@ -7,7 +7,7 @@
   "description": "Connect Four game with AI opponents",
   "icons": [
     {
-      "src": "img/icon-192.png",
+      "src": "img/four-in-line.png",
       "type": "image/png",
       "sizes": "192x192"
     },
