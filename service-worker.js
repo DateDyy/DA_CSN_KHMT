@@ -1,11 +1,15 @@
 const CACHE_NAME = 'four-in-line-v1';
 const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/styles.css',
-  '/main.js',
-  '/NewGame.js',
-  '/img/four-in-line.png'
+  './',
+  './index.html',
+  './styles.css',
+  './main.js',
+  './NewGame.js',
+  './img/four-in-line.png',
+  './img/sound-on.png',
+  './img/sound-off.png',
+  './sounds/background.mp3',
+  './sounds/drop.wav'
 ];
 
 self.addEventListener('install', (event) => {
