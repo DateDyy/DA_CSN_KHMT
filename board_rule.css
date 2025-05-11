@@ -19,6 +19,7 @@
 #rules-container.show {
     transform: translateY(0);
     opacity: 1;
+    display: block;  /* Đảm bảo display là block khi có lớp show */
 }
 #rules-container h2 {
     text-align: center;
