@@ -21,8 +21,8 @@
   <meta property="og:title" content="Four In Line - Strategic Connect Four Game">
   <meta property="og:description"
     content="Enjoy an interactive Connect Four experience with multiple difficulty levels and smart move suggestions.">
-  <meta property="og:image" content="https://datedyy.github.io/DA_CSN_KHMT/img/four-in-line.png">
-  <meta property="og:url" content="https://datedyy.github.io/DA_CSN_KHMT/">
+  <meta property="og:image" content="img/four-in-line.png">
+  <meta property="og:url" content="https://four-in-line.netlify.app/">
   <meta property="og:type" content="website">
 
   <!-- Twitter Card -->
@@ -30,15 +30,16 @@
   <meta name="twitter:title" content="Four In Line - Strategic Connect Four Game">
   <meta name="twitter:description"
     content="Enjoy an interactive Connect Four experience with smart AI and move suggestions.">
-  <meta name="twitter:image" content="https://datedyy.github.io/DA_CSN_KHMT/img/four-in-line.png">
+  <meta name="twitter:image" content="img/four-in-line.png">
 
   <!-- Favicon and Styles -->
   <link href="styles.css" rel="stylesheet">
   <link href="winning.css" rel="stylesheet">
   <link href="NewGame.css" rel="stylesheet">
   <link href="board_rule.css" rel="stylesheet">
-<script>navigator.serviceWorker.register("service-worker.js")</script> 
-<link rel="manifest" href="manifest.json" />  <link rel="icon" type="image/png" href="img/four-in-line.png">
+  <script>navigator.serviceWorker.register("service-worker.js")</script>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/png" href="img/four-in-line.png">
 </head>
 
 <body>
@@ -77,10 +78,11 @@
   <div id="new-game-container">
     <button id="new-game" title="Tạo game mới">New Game</button>
     <button id="sound-toggle" title="Bật/Tắt Âm Thanh">
-    <img id="sound-icon" src="./img/sound-on.png" alt="Toggle Sound" style="width: 32px; height: 32px;">
+      <img id="sound-icon" src="img/sound-on.png" alt="Toggle Sound" loading="lazy" style="width: 32px; height: 32px;">
     </button>
     <button id="suggestButton" title="Gợi ý nước đi">
-      <img src="./img/lightbulb-32.png" alt="Suggest Move" id="suggestIcon" style="width: 32px; height: 32px;">
+      <img src="img/lightbulb-32.png" alt="Suggest Move" id="suggestIcon" loading="lazy"
+        style="width: 32px; height: 32px;">
     </button>
 
     <div id="game-options" class="hidden">
