@@ -273,13 +273,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function checkGameWinOrDraw() {
     gameState.animating = false;
 
-    if (!gameState.pieces.includes(0)) {
-      elements.modalContainer.style.display = "block";
-      elements.modalMessage.textContent = "Draw";
-      playSound("draw");
-      return;
-    }
-
     const winningPositions = hasPlayerWon(gameState.playerTurn);
 
     if (winningPositions) {
@@ -300,6 +293,12 @@ document.addEventListener("DOMContentLoaded", () => {
         cell.firstChild.classList.add("winning-piece");
       });
 
+      return;
+    }
+    if (!gameState.pieces.includes(0)) {
+      elements.modalContainer.style.display = "block";
+      elements.modalMessage.textContent = "Draw";
+      playSound("draw");
       return;
     }
     
