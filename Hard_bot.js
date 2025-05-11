@@ -3,6 +3,16 @@ const PLAYER = 1;
 const AI = 2;
 
 const transpositionTable = new Map();
+const MAX_TABLE_SIZE = 1000000; // Limit table size
+
+function addToTranspositionTable(key, depth, result) {
+  if (transpositionTable.size >= MAX_TABLE_SIZE) {
+    // Clear 20% of the table when full
+    const keys = [...transpositionTable.keys()].slice(0, Math.floor(MAX_TABLE_SIZE * 0.2));
+    keys.forEach(k => transpositionTable.delete(k));
+  }
+  transpositionTable.set(key, { depth, result });
+}
 
 function copyBoard(board) {
   return board.map(row => [...row]);
@@ -153,7 +163,52 @@ function boardToKey(board, color) {
   return board.flat().join('') + '|' + color;
 }
 
+// Add time management for iterative deepening
+let startTime;
+let timeLimit = 1000; // Default 1 second time limit
+
+export function getBestMove(board, validMovesCount) {
+  startTime = Date.now();
+
+  // Adjust time limit based on board size
+  const totalCells = board.length * board[0].length;
+  if (totalCells > 42) { // Larger than standard 7x6 board
+    timeLimit = 1500; // Give more time for larger boards
+  }
+  if (totalCells > 56) { // Even larger
+    timeLimit = 2000; // Further increase time limit
+  }
+
+  let depth = 1;
+  let bestMove = null;
+  let maxDepth = 7;
+
+  // Adjust maxDepth based on validMovesCount
+  if (validMovesCount > 20) maxDepth = 5;
+  if (validMovesCount > 30) maxDepth = 4;
+  if (validMovesCount < 10) maxDepth = 9;
+  if (validMovesCount < 5) maxDepth = 12;
+
+  transpositionTable.clear();
+
+  // Iterative deepening
+  while (depth <= maxDepth) {
+    const result = negamax(board, depth, -Infinity, Infinity, 1);
+    if (Date.now() - startTime > timeLimit) break;
+
+    bestMove = result.column;
+    depth++;
+  }
+
+  return bestMove;
+}
+
+// Add time check in negamax
 function negamax(board, depth, alpha, beta, color) {
+  if (Date.now() - startTime > timeLimit) {
+    return { score: 0, column: null, timeOut: true };
+  }
+
   const boardKey = boardToKey(board, color);
   const cached = transpositionTable.get(boardKey);
   if (cached && cached.depth >= depth) return cached.result;
@@ -166,7 +221,7 @@ function negamax(board, depth, alpha, beta, color) {
     return { score, column: null };
   }
 
-  // Ưu tiên nước đi gần trung tâm
+  // Improved move ordering
   const center = Math.floor(board[0].length / 2);
   validLocations.sort((a, b) => Math.abs(a - center) - Math.abs(b - center));
 
@@ -188,17 +243,6 @@ function negamax(board, depth, alpha, beta, color) {
   }
 
   const result = { score: bestScore, column: bestCol };
-  transpositionTable.set(boardKey, { depth, result });
+  addToTranspositionTable(boardKey, depth, result);
   return result;
-}
-
-export function getBestMove(board, validMovesCount) {
-  let depth = 7;
-  if (validMovesCount > 20) depth = 5;
-  if (validMovesCount > 30) depth = 4;
-  if (validMovesCount < 10) depth = 9;
-  if (validMovesCount < 5) depth = 12;
-
-  transpositionTable.clear();
-  return negamax(board, depth, -Infinity, Infinity, 1).column;
 }

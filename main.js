@@ -273,13 +273,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function checkGameWinOrDraw() {
     gameState.animating = false;
 
-    if (!gameState.pieces.includes(0)) {
-      elements.modalContainer.style.display = "block";
-      elements.modalMessage.textContent = "Draw";
-      playSound("draw");
-      return;
-    }
-
     const winningPositions = hasPlayerWon(gameState.playerTurn);
 
     if (winningPositions) {
@@ -300,6 +293,12 @@ document.addEventListener("DOMContentLoaded", () => {
         cell.firstChild.classList.add("winning-piece");
       });
 
+      return;
+    }
+    if (!gameState.pieces.includes(0)) {
+      elements.modalContainer.style.display = "block";
+      elements.modalMessage.textContent = "Draw";
+      playSound("draw");
       return;
     }
     
@@ -346,6 +345,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const moveColumn = getEasyMove(board2D, 2);
     
     if (moveColumn >= 0 && moveColumn < gameState.boardWidth) {
+      gameState.hoverColumn = moveColumn;
+      updateHover();
       onColumnClicked(moveColumn);
     }
   }
@@ -355,6 +356,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const moveColumn = getMediumMove(board2D, 4);
     
     if (moveColumn >= 0 && moveColumn < gameState.boardWidth) {
+      gameState.hoverColumn = moveColumn;
+      updateHover();
       onColumnClicked(moveColumn);
     }
   }
@@ -365,6 +368,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const moveColumn = getHardMove(board2D, validMoves);
     
     if (moveColumn >= 0 && moveColumn < gameState.boardWidth) {
+      gameState.hoverColumn = moveColumn;
+      updateHover();
       onColumnClicked(moveColumn);
     }
   }
