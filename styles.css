@@ -581,3 +581,21 @@ img {
   padding: 20px;
 }
 
+/* Điều khiển âm thanh */
+#suggestionMessage {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+#sound-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+#sound-toggle img {
+  width: 32px;
+  height: 32px;
+}
