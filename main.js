@@ -56,6 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
     suggestionLimit: 0,
     backgroundMusicStarted: false
   };
+  elements.board.classList.add("disabled");
 
   // Initialize the game
   initializeEventListeners();
