@@ -345,6 +345,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const moveColumn = getEasyMove(board2D, 2);
     
     if (moveColumn >= 0 && moveColumn < gameState.boardWidth) {
+      gameState.hoverColumn = moveColumn;
+      updateHover();
       onColumnClicked(moveColumn);
     }
   }
@@ -354,6 +356,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const moveColumn = getMediumMove(board2D, 4);
     
     if (moveColumn >= 0 && moveColumn < gameState.boardWidth) {
+      gameState.hoverColumn = moveColumn;
+      updateHover();
       onColumnClicked(moveColumn);
     }
   }
@@ -364,6 +368,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const moveColumn = getHardMove(board2D, validMoves);
     
     if (moveColumn >= 0 && moveColumn < gameState.boardWidth) {
+      gameState.hoverColumn = moveColumn;
+      updateHover();
       onColumnClicked(moveColumn);
     }
   }
