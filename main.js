@@ -108,6 +108,21 @@ document.addEventListener("DOMContentLoaded", () => {
         playSound("background", true);
       }
     });
+    document.getElementById("sound-toggle").addEventListener("click", () => {
+      gameState.isSoundOn = !gameState.isSoundOn;
+
+      const soundIcon = document.getElementById("sound-icon");
+
+      if (gameState.isSoundOn) {
+        playSound("background", true);
+        soundIcon.src = "./img/sound-on.png";
+      } else {
+        sounds.background.pause();
+        sounds.background.currentTime = 0;
+        soundIcon.src = "./img/sound-off.png";
+      }
+    });
+
     document.getElementById("close-options").addEventListener("click", handleCloseOptions);
     // Thêm sự kiện click cho toàn bộ document để bắt đầu phát nhạc
     document.addEventListener('click', function initialClick() {
