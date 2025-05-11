@@ -522,7 +522,65 @@ img {
   justify-content: center;
   padding: 20px;
 }
-/* new */
+
+@media only screen and (max-width: 480px) {
+  body {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .game-board {
+    width: 100%;
+    height: auto;
+  }
+
+  .button {
+    font-size: 16px;
+    padding: 10px 20px;
+  }
+
+  .header {
+    font-size: 18px;
+    text-align: center;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  body {
+    font-size: 16px;
+    padding: 15px;
+  }
+
+  .game-board {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .button {
+    font-size: 18px;
+    padding: 12px 24px;
+  }
+
+  .header {
+    font-size: 20px;
+    text-align: center;
+  }
+}
+
+/* General responsive rules */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
 /* Điều khiển âm thanh */
 #suggestionMessage {
   display: inline-block;
