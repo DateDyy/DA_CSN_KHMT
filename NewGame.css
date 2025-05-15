@@ -58,7 +58,7 @@
   visibility: hidden;
   transition: opacity 0.3s ease, transform 0.3s ease;
   text-align: center;
-  width: 90%;
+  width: 100%;
   max-width: 400px;
   /* Giới hạn chiều cao và cho phép cuộn khi nội dung vượt quá */
   max-height: 80vh;
@@ -85,7 +85,7 @@
   margin-bottom: 5px;
   text-align: left;
   font-size: 1rem;
-  color: #555;
+  color: #000000;
 }
 
 #game-options select#computer-difficulty {
@@ -105,6 +105,8 @@
   background-repeat: no-repeat;
   background-position: right 10px center;
   background-size: 12px 8px;
+  color: #282828;
+  font-weight: 550;
 }
 
 /* Container cho các nút hành động bên trong modal */
