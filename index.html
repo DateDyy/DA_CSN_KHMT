@@ -46,7 +46,7 @@
   <h1>Four In Line</h1>
 
   <button id="rules-button" title="Hướng dẫn">How to Play</button>
-  <div id="rules-container">
+  <div id="rules-container" tabindex="-1" aria-modal="true" role="dialog">
     <h2>How to Play</h2>
     <p>1. Players take turns dropping pieces into a column.</p>
     <p>2. The piece will land on the lowest available row.</p>
@@ -64,58 +64,58 @@
     document.getElementById("rules-button").addEventListener("click", function () {
       const rulesContainer = document.getElementById("rules-container");
       rulesContainer.classList.toggle("show");
+      if (rulesContainer.classList.contains("show")) rulesContainer.focus();
     });
   </script>
 
-  <div id="turn-notification">
+  <div id="turn-notification" aria-live="polite">
     <div class="notification-content">
       <div class="player-indicator"></div>
       <span id="turn-message">Player 1's Turn</span>
     </div>
   </div>
 
-  <div id="suggestionMessage" class="message-box hidden"></div>
+  <div id="suggestionMessage" class="message-box hidden" aria-live="polite"></div>
   <div id="new-game-container">
     <button id="new-game" title="Tạo game mới">New Game</button>
-    <button id="sound-toggle" title="Bật/Tắt Âm Thanh">
-      <img id="sound-icon" src="img/sound-on.png" alt="Toggle Sound" loading="lazy" style="width: 32px; height: 32px;">
+    <button id="sound-toggle" title="Bật/Tắt Âm Thanh" aria-label="Toggle Sound">
+      <img id="sound-icon" src="img/sound-on.png" alt="Toggle Sound" loading="lazy" width="32" height="32">
     </button>
-    <button id="suggestButton" title="Gợi ý nước đi">
-      <img src="img/lightbulb-32.png" alt="Suggest Move" id="suggestIcon" loading="lazy"
-        style="width: 32px; height: 32px;">
+    <button id="suggestButton" title="Gợi ý nước đi" aria-label="Suggest Move">
+      <img src="img/lightbulb-32.png" alt="Suggest Move" id="suggestIcon" loading="lazy" width="32" height="32">
     </button>
 
-    <div id="game-options" class="hidden">
+    <div id="game-options" class="hidden" role="dialog" aria-modal="true" tabindex="-1">
       <h2>Game Options</h2>
-      <label>Player 1:
+      <label for="player1-type">Player 1:
         <select id="player1-type">
           <option value="human">Human</option>
           <option value="computer">Computer</option>
         </select>
       </label>
       <br>
-      <label>Player 1 Color:
+      <label for="player1-color">Player 1 Color:
         <select id="player1-color">
           <option value="red">Red</option>
           <option value="yellow">Yellow</option>
         </select>
       </label>
       <br>
-      <label>Player 2:
+      <label for="player2-type">Player 2:
         <select id="player2-type">
           <option value="human">Human</option>
           <option value="computer">Computer</option>
         </select>
       </label>
       <br>
-      <label>Player 2 Color:
+      <label for="player2-color">Player 2 Color:
         <select id="player2-color">
           <option value="yellow">Yellow</option>
           <option value="red">Red</option>
         </select>
       </label>
       <br>
-      <label>Computer Difficulty:
+      <label for="computer-difficulty">Computer Difficulty:
         <select id="computer-difficulty">
           <option value="easy">Easy</option>
           <option value="medium">Medium</option>
@@ -123,7 +123,7 @@
         </select>
       </label>
       <br>
-      <label>Board Size:
+      <label for="board-size">Board Size:
         <select id="board-size">
           <option value="7x6">7x6</option>
           <option value="8x7">8x7</option>
@@ -131,7 +131,7 @@
         </select>
       </label>
       <br>
-      <label>Board Background:
+      <label for="board-bg">Board Background:
         <select id="board-bg">
           <option value="wood">Wood</option>
           <option value="blue">Blue</option>
@@ -143,8 +143,8 @@
       <button id="close-options">Close</button>
     </div>
   </div>
-  <div id="board"></div>
-  <div id="modal-container">
+  <div id="board" aria-label="Game Board"></div>
+  <div id="modal-container" role="dialog" aria-modal="true" tabindex="-1">
     <div id="modal-content">
       <h1 style="color: black;">Game Over</h1>
       <p id="modal-message">The game is a draw</p>

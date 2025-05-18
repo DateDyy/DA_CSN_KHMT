@@ -33,6 +33,20 @@ function makeMove(board, col, piece) {
   return newBoard;
 }
 
+function makeMoveInPlace(board, col, piece) {
+  for (let row = board.length - 1; row >= 0; row--) {
+    if (board[row][col] === EMPTY) {
+      board[row][col] = piece;
+      return row; // trả về vị trí đã đặt quân để undo nhanh
+    }
+  }
+  return -1; // không hợp lệ
+}
+
+function undoMove(board, col, row) {
+  board[row][col] = EMPTY;
+}
+
 function winningMove(board, piece) {
   const rows = board.length;
   const cols = board[0].length;
@@ -68,10 +82,10 @@ function scoreWindow(window, piece) {
   const countEmpty = 4 - countPiece - countOpponent;
 
   if (countPiece === 4) return 10000;
-  if (countPiece === 3 && countEmpty === 1) return 1000;
-  if (countPiece === 2 && countEmpty === 2) return 50;
-  if (countOpponent === 3 && countEmpty === 1) return -1200;
-  if (countOpponent === 2 && countEmpty === 2) return -30;
+  if (countPiece === 3 && countEmpty === 1 && countOpponent === 0) return 5000;
+  if (countPiece === 2 && countEmpty === 2 && countOpponent === 0) return 200;
+  if (countOpponent === 3 && countEmpty === 1) return -8000;
+  if (countOpponent === 2 && countEmpty === 2) return -100;
   return 0;
 }
 
@@ -221,7 +235,6 @@ function negamax(board, depth, alpha, beta, color) {
     return { score, column: null };
   }
 
-  // Improved move ordering
   const center = Math.floor(board[0].length / 2);
   validLocations.sort((a, b) => Math.abs(a - center) - Math.abs(b - center));
 
@@ -229,9 +242,11 @@ function negamax(board, depth, alpha, beta, color) {
   let bestCol = validLocations[0];
 
   for (const col of validLocations) {
-    const newBoard = makeMove(board, col, color === 1 ? AI : PLAYER);
-    const { score } = negamax(newBoard, depth - 1, -beta, -alpha, -color);
+    const row = makeMoveInPlace(board, col, color === 1 ? AI : PLAYER);
+    if (row === -1) continue; // skip invalid
+    const { score } = negamax(board, depth - 1, -beta, -alpha, -color);
     const currentScore = -score;
+    undoMove(board, col, row);
 
     if (currentScore > bestScore) {
       bestScore = currentScore;
