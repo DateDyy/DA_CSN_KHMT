@@ -12,7 +12,9 @@ const SECOND_TURN = 2;
 // Audio System
 const sounds = {
   drop: new Audio('sounds/drop.wav'),
-  background: new Audio('sounds/background.mp3')
+  background: new Audio('sounds/background.mp3'),
+  win: new Audio('sounds/win.mp3'),
+  draw: new Audio('sounds/draw.mp3'),
 };
 
 // Add error handling for audio files
@@ -297,11 +299,21 @@ document.addEventListener("DOMContentLoaded", () => {
         gameState.playerTurn === FIRST_TURN
           ? elements.player1ColorSelect.value
           : elements.player2ColorSelect.value;
-      elements.modalMessage.textContent = `Player ${gameState.playerTurn} WON!`;
+      // Xác định loại người chơi thắng
+      const winnerType = gameState.playerTurn === FIRST_TURN
+        ? elements.player1TypeSelect.value.trim().toLowerCase()
+        : elements.player2TypeSelect.value.trim().toLowerCase();
+      if (winnerType === "computer") {
+        elements.modalMessage.textContent = "Computer WON!";
+
+      } else {
+        elements.modalMessage.textContent = `Player ${gameState.playerTurn} WON!`;
+      }
       elements.modalMessage.style.color = winnerColor;
       elements.modalMessage.dataset.winner = gameState.playerTurn;
-
       playSound("win");
+
+      
 
       // Highlight winning pieces
       winningPositions.forEach((index) => {
