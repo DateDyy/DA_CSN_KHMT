@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
     hoverColumn: -1,
     animating: false,
     isGameRunning: false,
-    isSoundOn: true,
+    isSoundOn: false,
     suggestionCount: 0,
     suggestionLimit: 0,
     backgroundMusicStarted: false
