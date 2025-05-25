@@ -190,11 +190,11 @@ h1 {
   z-index: 100;
   background-color: #000000b3;
   backdrop-filter: blur(5px);
-  padding-top: 15vh;
+  padding: 15vh 5vw 5vh 5vw;
 }
 #modal-content {
   position: relative;
-  width: 80vw;
+  width: 100%;
   max-width: 600px;
   margin: auto;
   padding: 3vmin;
@@ -244,6 +244,90 @@ h1 {
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 1px;
+  min-height: 44px;
+}
+
+/* Mobile Modal Optimizations */
+@media (max-width: 768px) {
+  #modal-container {
+    padding: 10vh 3vw 3vh 3vw;
+  }
+  
+  #modal-content {
+    padding: 20px;
+    border-radius: 12px;
+  }
+  
+  #modal-message {
+    font-size: 4vmin;
+    margin: 2vmin;
+  }
+  
+  #modal-buttons {
+    gap: 15px;
+    margin-top: 15px;
+  }
+  
+  #modal-content button {
+    font-size: 16px;
+    padding: 12px 20px;
+    min-height: 48px;
+  }
+}
+
+@media (max-width: 600px) {
+  #modal-container {
+    padding: 8vh 2vw 2vh 2vw;
+  }
+  
+  #modal-content {
+    padding: 15px;
+  }
+  
+  #modal-message {
+    font-size: 5vmin;
+    margin: 1.5vmin;
+  }
+  
+  #modal-buttons {
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  
+  #modal-content button {
+    font-size: 14px;
+    padding: 10px 16px;
+    max-width: none;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  #modal-container {
+    padding: 5vh 1vw 1vh 1vw;
+  }
+  
+  #modal-content {
+    padding: 12px;
+    border-radius: 8px;
+  }
+  
+  #modal-message {
+    font-size: 6vmin;
+    margin: 1vmin;
+  }
+  
+  #modal-buttons {
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  #modal-content button {
+    font-size: 13px;
+    padding: 8px 14px;
+    border-radius: 6px;
+  }
 }
 #reset {
   color: #fff;
@@ -318,31 +402,227 @@ h1 {
 }
 
 /* Responsive adjustments */
+/* Enhanced Mobile Responsiveness */
+@media (max-width: 768px) {
+  body { 
+    font-size: 16px; 
+    padding: 10px; 
+    min-height: 100vh;
+    min-height: 100dvh; /* Dynamic viewport height for mobile */
+  }
+  
+  h1 {
+    font-size: clamp(1.2rem, 4vw, 2rem);
+    margin: 1vh 0;
+  }
+  
+  #board {
+    padding-top: 4vmin;
+    margin: 1vh auto;
+    max-width: 95vw;
+  }
+  
+  #turn-notification {
+    top: 15%;
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+  
+  .player-indicator {
+    width: 20px;
+    height: 20px;
+  }
+  
+  #turn-message {
+    font-size: 14px;
+  }
+}
+
 @media (max-width: 600px) {
-  :root { --cell-size: 8vmin; }
-  #board { padding-top: 5vmin; transform: none; }
-  #rules-container { width: 90%; right: 5%; top: 80px; }
-  #rules-button { top: 20px; right: 5%; font-size: 16px; padding: 8px 12px; }
+  :root { 
+    --cell-size: clamp(35px, 8vmin, 60px);
+  }
+  
+  body {
+    padding: 8px;
+  }
+  
+  #board { 
+    padding-top: 4vmin;
+    transform: none;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+  }
+  
+  #new-game-container {
+    margin-bottom: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  #new-game {
+    font-size: 1rem;
+    padding: 10px 20px;
+    min-width: 120px;
+  }
+  
+  #sound-toggle {
+    width: 36px;
+    height: 36px;
+    margin-left: 0;
+  }
+  
+  #sound-toggle img {
+    width: 24px;
+    height: 24px;
+  }
+  
+  #suggestButton {
+    margin-left: 0;
+  }
 }
+
+@media (max-width: 480px) {
+  :root { 
+    --cell-size: clamp(30px, 12vw, 50px);
+  }
+  
+  body { 
+    font-size: 14px; 
+    padding: 5px;
+  }
+  
+  h1 { 
+    font-size: clamp(1rem, 5vw, 1.5rem);
+    margin: 0.5vh 0;
+  }
+  
+  #board {
+    padding-top: 3vmin;
+    margin: 0.5vh auto;
+  }
+  
+  #turn-notification {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 12px;
+    border-left: none;
+    border-top: 3px solid #87cefa;
+  }
+  
+  .notification-content {
+    gap: 8px;
+  }
+  
+  .player-indicator {
+    width: 18px;
+    height: 18px;
+  }
+  
+  #turn-message {
+    font-size: 12px;
+  }
+  
+  #new-game-container {
+    margin-bottom: 10px;
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  #new-game {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+    width: 100%;
+    max-width: 200px;
+  }
+  
+  #sound-toggle, #suggestButton {
+    width: 32px;
+    height: 32px;
+  }
+  
+  #sound-toggle img, #suggestButton img {
+    width: 20px;
+    height: 20px;
+  }
+}
+
 @media (max-width: 400px) {
-  :root { --cell-size: 12vw; }
-  h1 { font-size: 1.5rem; }
+  :root { 
+    --cell-size: clamp(25px, 14vw, 45px);
+  }
+  
+  h1 { 
+    font-size: 1.2rem;
+    margin: 0.3vh 0;
+  }
+  
+  #board {
+    padding-top: 2.5vmin;
+  }
 }
+
+/* Landscape orientation optimizations */
 @media (max-height: 600px) and (orientation: landscape) {
-  #board { padding-top: 2vh; }
-  #new-game-container { position: fixed; top: 0; right: 0; }
+  body {
+    padding: 5px;
+  }
+  
+  h1 {
+    font-size: 1.2rem;
+    margin: 0.5vh 0;
+  }
+  
+  #board { 
+    padding-top: 2vh;
+    margin: 0.5vh auto;
+  }
+  
+  #new-game-container { 
+    position: fixed; 
+    top: 5px; 
+    right: 5px;
+    margin-bottom: 0;
+    flex-direction: row;
+    gap: 5px;
+  }
+  
+  #turn-notification {
+    top: 5px;
+    left: 5px;
+    transform: none;
+    font-size: 11px;
+    padding: 6px 10px;
+  }
 }
-@media only screen and (max-width: 480px) {
-  body { font-size: 14px; padding: 10px; }
-  .game-board, .container { width: 100%; height: auto; }
-  .button { font-size: 16px; padding: 10px 20px; }
-  .header { font-size: 18px; text-align: center; }
-}
-@media only screen and (max-width: 768px) {
-  body { font-size: 16px; padding: 15px; }
-  .game-board, .container { width: 90%; margin: 0 auto; }
-  .button { font-size: 18px; padding: 12px 24px; }
-  .header { font-size: 20px; text-align: center; }
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+  .cell {
+    cursor: pointer;
+  }
+  
+  button {
+    min-height: 44px; /* iOS recommended touch target size */
+    min-width: 44px;
+  }
+  
+  #sound-toggle, #suggestButton {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Increase tap targets for better mobile UX */
+  #rules-button {
+    min-height: 44px;
+    padding: 12px 16px;
+  }
 }
 img {
   max-width: 100%;

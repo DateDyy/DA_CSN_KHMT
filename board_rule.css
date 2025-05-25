@@ -59,18 +59,135 @@
 }
 
 
+/* Enhanced Mobile Responsive Rules */
 @media (max-width: 768px) {
     #rules-container {
         width: 90%;
-        max-width: 300px;
+        max-width: 320px;
         right: 5%;
-        top: 120px;
-        padding: 12px;
+        top: 100px;
+        padding: 15px;
+        font-size: 0.9rem;
+        backdrop-filter: blur(8px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
     }
+    
+    #rules-container h2 {
+        font-size: 1.1rem;
+        margin-bottom: 12px;
+    }
+    
+    #rules-container p {
+        font-size: 0.85rem;
+        line-height: 1.5;
+        margin-bottom: 8px;
+    }
+    
     #rules-button {
-        top: 80px;
+        top: 60px;
         right: 5%;
         font-size: 0.9rem;
         padding: 10px 16px;
+        min-height: 44px;
+        min-width: 44px;
+    }
+}
+
+@media (max-width: 600px) {
+    #rules-container {
+        width: 95%;
+        max-width: 95%;
+        right: 2.5%;
+        top: 80px;
+        padding: 12px;
+        border-radius: 10px;
+    }
+    
+    #rules-container h2 {
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+    
+    #rules-container p {
+        font-size: 0.8rem;
+        line-height: 1.4;
+        margin-bottom: 6px;
+    }
+    
+    #rules-button {
+        top: 50px;
+        right: 2.5%;
+        font-size: 0.85rem;
+        padding: 8px 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    #rules-container {
+        width: 98%;
+        right: 1%;
+        top: 60px;
+        padding: 10px;
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+    
+    #rules-container h2 {
+        font-size: 0.95rem;
+        margin-bottom: 8px;
+    }
+    
+    #rules-container p {
+        font-size: 0.75rem;
+        line-height: 1.3;
+        margin-bottom: 5px;
+    }
+    
+    #rules-button {
+        top: 40px;
+        right: 1%;
+        font-size: 0.8rem;
+        padding: 6px 12px;
+        border-radius: 6px;
+    }
+}
+
+/* Landscape orientation for rules */
+@media (max-height: 600px) and (orientation: landscape) {
+    #rules-container {
+        top: 40px;
+        max-height: 60vh;
+        padding: 8px;
+        font-size: 0.8rem;
+    }
+    
+    #rules-container h2 {
+        font-size: 0.9rem;
+        margin-bottom: 6px;
+    }
+    
+    #rules-container p {
+        font-size: 0.7rem;
+        line-height: 1.2;
+        margin-bottom: 4px;
+    }
+    
+    #rules-button {
+        top: 20px;
+        font-size: 0.75rem;
+        padding: 4px 10px;
+    }
+}
+
+/* Touch-friendly improvements for rules */
+@media (hover: none) and (pointer: coarse) {
+    #rules-button {
+        min-height: 44px;
+        min-width: 44px;
+        touch-action: manipulation;
+    }
+    
+    #rules-container {
+        touch-action: pan-y;
     }
 }

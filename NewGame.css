@@ -157,44 +157,164 @@
   opacity: 0.5;
 }
 
-/* Responsive styles cho modal Game Options */
-@media (max-width: 600px) {
+/* Enhanced Mobile Responsive styles for Game Options Modal */
+@media (max-width: 768px) {
   #game-options {
-    width: 75%; /* Chiếm 80% chiều rộng màn hình */
-    max-width: 80%; /* Loại bỏ giới hạn max-width cứng */
-    padding: 15px; /* Giảm padding để tiết kiệm không gian */
-    max-height: 90vh; /* Giới hạn chiều cao không vượt quá 90% của viewport */
-    overflow-y: auto; /* Xuất hiện thanh cuộn nếu cần */
+    width: 90%;
+    max-width: 90%;
+    padding: 20px;
+    max-height: 85vh;
+    overflow-y: auto;
+    border-radius: 12px;
   }
 
   #game-options h2 {
-    font-size: 1.3rem;
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+  }
+
+  #game-options label {
+    font-size: 1rem;
+    margin-bottom: 8px;
+    display: block;
+    font-weight: 600;
+  }
+
+  #game-options select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+    background-color: #fff;
+    min-height: 44px; /* Touch-friendly height */
+  }
+
+  #game-options .form-actions {
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  #game-options button {
+    padding: 12px 20px;
+    font-size: 1rem;
+    border-radius: 8px;
+    min-height: 44px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+}
+
+@media (max-width: 600px) {
+  #game-options {
+    width: 95%;
+    max-width: 95%;
+    padding: 15px;
+    max-height: 90vh;
+    margin: 5vh auto;
+  }
+
+  #game-options h2 {
+    font-size: 1.2rem;
+    margin-bottom: 12px;
   }
 
   #game-options label {
     font-size: 0.9rem;
-  }
-
-  #game-options select#computer-difficulty {
-    width: 90%; /* Chiếm toàn bộ chiều rộng container */
+    margin-bottom: 6px;
   }
 
   #game-options select {
-    width: 90%; /* Chiếm toàn bộ chiều rộng container */
-
-    padding: 6px;
-    margin-top: 4px;
-    margin-bottom: 4px;
+    padding: 10px;
+    margin-bottom: 12px;
     font-size: 0.9rem;
   }
-  /* Chuyển các nút hành động hiển thị theo cột trên điện thoại */
+
   #game-options .form-actions {
-    flex-direction: column;
-    gap: 8px;
+    gap: 10px;
+    margin-top: 15px;
   }
 
   #game-options button {
-    padding: 8px;
+    padding: 10px 16px;
     font-size: 0.9rem;
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  #game-options {
+    width: 98%;
+    max-width: 98%;
+    padding: 12px;
+    margin: 2vh auto;
+    max-height: 95vh;
+  }
+
+  #game-options h2 {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+  }
+
+  #game-options label {
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+  }
+
+  #game-options select {
+    padding: 8px;
+    margin-bottom: 10px;
+    font-size: 0.85rem;
+    border-radius: 6px;
+  }
+
+  #game-options .form-actions {
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  #game-options button {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    border-radius: 6px;
+  }
+}
+
+/* Landscape orientation for mobile */
+@media (max-height: 600px) and (orientation: landscape) {
+  #game-options {
+    max-height: 95vh;
+    padding: 10px;
+    margin: 1vh auto;
+  }
+
+  #game-options h2 {
+    font-size: 1rem;
+    margin-bottom: 8px;
+  }
+
+  #game-options label {
+    font-size: 0.8rem;
+    margin-bottom: 3px;
+  }
+
+  #game-options select {
+    padding: 6px;
+    margin-bottom: 8px;
+    font-size: 0.8rem;
+  }
+
+  #game-options .form-actions {
+    flex-direction: row;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  #game-options button {
+    padding: 6px 12px;
+    font-size: 0.8rem;
   }
 }
