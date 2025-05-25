@@ -403,3 +403,110 @@ img {
 #sound-toggle.off img {
   filter: drop-shadow(0 0 5px rgba(244, 67, 54, 0.8));
 }
+
+/* Đảm bảo new-game-container là relative để định vị tuyệt đối */
+#new-game-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+/* Đặt sound-toggle là relative để định vị volume-slider-container theo nó */
+#sound-toggle {
+  position: relative;
+  z-index: 2;
+}
+
+/* Đảm bảo sound-group là relative để định vị tuyệt đối volume-slider-container */
+.sound-group {
+  position: relative;
+  display: inline-block;
+}
+
+/* Thanh volume nằm phía trên, canh giữa icon sound, chỉ hiển thị khi hover vào sound-group */
+#volume-slider-container {
+  position: absolute;
+  left: 50%;
+  bottom: 100%; /* nằm trên icon sound */
+  transform: translateX(-50%) translateY(-8px);
+  display: none;
+  background: transparent;
+  padding: 0;
+  border-radius: 8px;
+  box-shadow: none;
+  z-index: 30;
+  min-width: 40px;
+  min-height: 60px;
+  height: 55px;
+  width: 32px;
+  justify-content: center;
+  align-items: center;
+  pointer-events: auto;
+  margin-left: 5px;
+}
+
+/* Hiển thị khi hover vào sound-group (bao gồm cả icon và thanh volume) */
+.sound-group:hover #volume-slider-container {
+  display: flex;
+}
+
+/* Thanh trượt dọc, ngắn hơn, dùng writing-mode hiện đại */
+#volume-slider {
+  writing-mode: vertical-lr;
+  direction: rtl;
+  width: 32px;
+  height: 55px;
+  accent-color: #2f819f;
+  background: transparent;
+  margin: 0 auto;
+  display: block;
+  outline: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px #0002;
+  transition: background 0.3s;
+}
+
+/* Tùy chỉnh thumb cho các trình duyệt */
+#volume-slider::-webkit-slider-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #f8721a;
+  box-shadow: 0 2px 6px #0003;
+  cursor: pointer;
+  transition: background 0.3s, border 0.3s;
+}
+#volume-slider:focus::-webkit-slider-thumb {
+  background: #f8721a;
+  border: 2px solid #fff;
+}
+#volume-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #f8721a;
+  box-shadow: 0 2px 6px #0003;
+  cursor: pointer;
+  transition: background 0.3s, border 0.3s;
+}
+#volume-slider:focus::-moz-range-thumb {
+  background: #f8721a;
+  border: 2px solid #fff;
+}
+#volume-slider::-ms-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #f8721a;
+  box-shadow: 0 2px 6px #0003;
+  cursor: pointer;
+  transition: background 0.3s, border 0.3s;
+}
+#volume-slider:focus::-ms-thumb {
+  background: #f8721a;
+  border: 2px solid #fff;
+}

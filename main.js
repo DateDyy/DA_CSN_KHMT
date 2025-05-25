@@ -118,17 +118,21 @@ document.addEventListener("DOMContentLoaded", () => {
     // Phát nhạc nền khi người dùng bắt đầu trò chơi
     document.getElementById("start-game").addEventListener("click", function() {
       handleGameStart();
+    // Khi bấm Play, bật âm thanh và đổi icon
+    gameState.isSoundOn = true;
+    const soundIcon = document.getElementById("sound-icon");
+    if (soundIcon) soundIcon.src = "./img/sound-on.png";
     // Luôn phát nhạc nền khi bấm Play nếu đang bật âm thanh
     if (gameState.isSoundOn) {
       playSound("background", true);
     }
-    });
+  });
     document.getElementById("sound-toggle").addEventListener("click", () => {
       gameState.isSoundOn = !gameState.isSoundOn;
 
       const soundIcon = document.getElementById("sound-icon");
       if (soundIcon) {
-      soundIcon.src = gameState.isSoundOn ? "./img/sound-on.png" : "./img/sound-off.png";
+      soundIcon.src = "./img/sound-off.png";
     }
       // Cập nhật biểu tượng âm thanh
       if (gameState.isSoundOn) {
@@ -154,6 +158,18 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initial setup
     setBoardDimensions(elements.boardSizeSelect.value);
     elements.suggestButton.style.visibility = "hidden";
+
+    // Sau khi khai báo sounds
+    const volumeSlider = document.getElementById("volume-slider");
+    if (volumeSlider) {
+      volumeSlider.value = sounds.background.volume;
+      volumeSlider.addEventListener("input", function () {
+        const vol = parseFloat(this.value);
+        Object.values(sounds).forEach(sound => {
+          sound.volume = vol;
+        });
+      });
+    }
   }
 
   // Event Handlers
