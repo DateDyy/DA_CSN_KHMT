@@ -179,16 +179,20 @@ startGameButton.addEventListener("click", () => {
       blue: {
         backgroundImage: "url('img/BG_Blue.jpg')",
         boardColor: "rgb(41, 95, 211)",
+        music: "sounds/blueBG.mp3"
       },
       green: {
         backgroundImage: "url('img/BG_Green.jpg')",
         boardColor: "rgb(84, 187, 85)",
+        music: "sounds/greenbackground.mp3"
       },
       wood: {
         backgroundImage: "url('img/BG_Wood.png')",
         boardColor: "rgb(238, 125, 50)",
+        music: "sounds/woodBG.mp3"
       },
     };
+
 
     const settings = boardBackgrounds[boardBgValue] || {};
     if (settings.backgroundImage) {
@@ -197,6 +201,11 @@ startGameButton.addEventListener("click", () => {
       body.style.backgroundPosition = "center";
       body.style.backgroundRepeat = "no-repeat";
       board.style.setProperty("--boardColor", settings.boardColor);
+    }
+
+     // Lưu tên file nhạc nền vào localStorage
+    if (settings.music) {
+      localStorage.setItem("backgroundMusic", settings.music);
     }
     initializeBoard();
   });

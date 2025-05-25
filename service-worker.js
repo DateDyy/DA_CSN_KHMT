@@ -8,8 +8,17 @@ const ASSETS_TO_CACHE = [
   './img/four-in-line.png',
   './img/sound-on.png',
   './img/sound-off.png',
+  './img/BG_Blue.jpg',
+  './img/BG_Green.jpg',
+  './img/BG_Wood.png',
+  './img/lightbulb-32.png',
   './sounds/background.mp3',
-  './sounds/drop.wav'
+  './sounds/blueBG.mp3',
+  './sounds/greenbackground.mp3',
+  './sounds/woodBG.mp3',
+  './sounds/drop.wav',
+  './sounds/win.mp3',
+  './sounds/draw.mp3'
 ];
 
 self.addEventListener('install', (event) => {

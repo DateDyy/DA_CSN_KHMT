@@ -12,10 +12,11 @@ const SECOND_TURN = 2;
 // Audio System
 const sounds = {
   drop: new Audio('sounds/drop.wav'),
-  background: new Audio('sounds/background.mp3'),
+  background: new Audio('sounds/woodBG.mp3'),
   win: new Audio('sounds/win.mp3'),
   draw: new Audio('sounds/draw.mp3'),
 };
+
 
 // Add error handling for audio files
 Object.values(sounds).forEach(sound => {
@@ -53,12 +54,24 @@ document.addEventListener("DOMContentLoaded", () => {
     hoverColumn: -1,
     animating: false,
     isGameRunning: false,
-    isSoundOn: false,
+    isSoundOn: true, // <-- Mặc định bật âm thanh
     suggestionCount: 0,
     suggestionLimit: 0,
     backgroundMusicStarted: false
   };
   elements.board.classList.add("disabled");
+  // Thêm hàm cập nhật nhạc nền
+  function updateBackgroundMusic() {
+    const musicFile = localStorage.getItem("backgroundMusic");
+    if (musicFile && sounds.background.src.indexOf(musicFile) === -1) {
+      sounds.background.pause();
+      sounds.background.src = musicFile;
+      sounds.background.load();
+      if (gameState.isSoundOn) {
+        playSound("background", true);
+      }
+    }
+  }
 
   // Initialize the game
   initializeEventListeners();
@@ -105,16 +118,19 @@ document.addEventListener("DOMContentLoaded", () => {
     // Phát nhạc nền khi người dùng bắt đầu trò chơi
     document.getElementById("start-game").addEventListener("click", function() {
       handleGameStart();
-      // Phát nhạc nền khi có tương tác người dùng
-      if (!gameState.backgroundMusicStarted) {
-        playSound("background", true);
-      }
+    // Luôn phát nhạc nền khi bấm Play nếu đang bật âm thanh
+    if (gameState.isSoundOn) {
+      playSound("background", true);
+    }
     });
     document.getElementById("sound-toggle").addEventListener("click", () => {
       gameState.isSoundOn = !gameState.isSoundOn;
 
       const soundIcon = document.getElementById("sound-icon");
-
+      if (soundIcon) {
+      soundIcon.src = gameState.isSoundOn ? "./img/sound-on.png" : "./img/sound-off.png";
+    }
+      // Cập nhật biểu tượng âm thanh
       if (gameState.isSoundOn) {
         playSound("background", true);
         soundIcon.src = "./img/sound-on.png";
@@ -127,13 +143,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("close-options").addEventListener("click", handleCloseOptions);
     // Thêm sự kiện click cho toàn bộ document để bắt đầu phát nhạc
-    document.addEventListener('click', function initialClick() {
-      if (!gameState.backgroundMusicStarted) {
-        playSound("background", true);
-      }
-      // Chỉ thực hiện một lần
-      document.removeEventListener('click', initialClick);
-    }, { once: true });
+    // document.addEventListener('click', function initialClick() {
+    //   if (!gameState.backgroundMusicStarted) {
+    //     playSound("background", true);
+    //   }
+    //   // Chỉ thực hiện một lần
+    //   document.removeEventListener('click', initialClick);
+    // }, { once: true });
     
     // Initial setup
     setBoardDimensions(elements.boardSizeSelect.value);
@@ -156,6 +172,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function handleGameStart() {
+    updateBackgroundMusic();
     gameState.isGameRunning = true;
     document.getElementById("turn-notification").style.visibility = "visible";
     elements.board.classList.remove("visibi");
