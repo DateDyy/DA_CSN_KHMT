@@ -11,53 +11,55 @@ const SECOND_TURN = 2;
 
 // Audio System
 const sounds = {
-  drop: new Audio('sounds/drop.wav'),
-  background: new Audio('sounds/woodBG.mp3'),
-  win: new Audio('sounds/win.mp3'),
-  draw: new Audio('sounds/draw.mp3'),
+  drop: new Audio('sounds/drop.wav'), // Âm thanh khi thả quân
+  background: new Audio('sounds/woodBG.mp3'), // Nhạc nền
+  win: new Audio('sounds/win.mp3'), // Âm thanh khi thắng
+  draw: new Audio('sounds/draw.mp3'), // Âm thanh khi hòa
 };
 
 
-// Add error handling for audio files
+// Thêm xử lý lỗi khi tải file âm thanh
 Object.values(sounds).forEach(sound => {
   sound.addEventListener('error', () => {
-    console.error(`Failed to load sound: ${sound.src}`);
+    console.error(`Không tải được âm thanh: ${sound.src}`);
   });
 });
 
-// Main Game Module
+// Module chính của game
+// Khi trang web tải xong
 document.addEventListener("DOMContentLoaded", () => {
   // DOM Elements
+  // Các phần tử giao diện DOM
   const elements = {
-    board: document.querySelector("#board"),
-    modalContainer: document.querySelector("#modal-container"),
-    modalMessage: document.querySelector("#modal-message"),
-    resetButton: document.querySelector("#reset"),
-    boardSizeSelect: document.querySelector("#board-size"),
-    player1ColorSelect: document.querySelector("#player1-color"),
-    player2ColorSelect: document.querySelector("#player2-color"),
-    player1TypeSelect: document.querySelector("#player1-type"),
-    player2TypeSelect: document.querySelector("#player2-type"),
-    reviewButton: document.getElementById("review"),
-    computerDifficultySelect: document.querySelector("#computer-difficulty"),
-    suggestButton: document.getElementById("suggestButton"),
-    turnMessage: document.getElementById("turn-message"),
-    playerIndicator: document.querySelector(".player-indicator")
+    board: document.querySelector("#board"), // Bàn cờ
+    modalContainer: document.querySelector("#modal-container"), // Hộp thoại thông báo
+    modalMessage: document.querySelector("#modal-message"), // Nội dung thông báo
+    resetButton: document.querySelector("#reset"), // Nút chơi lại
+    boardSizeSelect: document.querySelector("#board-size"), // Chọn kích thước bàn cờ
+    player1ColorSelect: document.querySelector("#player1-color"), // Chọn màu người chơi 1
+    player2ColorSelect: document.querySelector("#player2-color"), // Chọn màu người chơi 2
+    player1TypeSelect: document.querySelector("#player1-type"), // Chọn loại người chơi 1
+    player2TypeSelect: document.querySelector("#player2-type"), // Chọn loại người chơi 2
+    reviewButton: document.getElementById("review"), // Nút xem lại
+    computerDifficultySelect: document.querySelector("#computer-difficulty"), // Chọn độ khó máy tính
+    suggestButton: document.getElementById("suggestButton"), // Nút gợi ý nước đi
+    turnMessage: document.getElementById("turn-message"), // Thông báo lượt chơi
+    playerIndicator: document.querySelector(".player-indicator") // Hiển thị người chơi hiện tại
   };
 
-  // Game State
+  // Trạng thái game
   const gameState = {
-    boardWidth: 7,
-    boardHeight: 6,
-    pieces: [],
-    playerTurn: FIRST_TURN,
-    hoverColumn: -1,
-    animating: false,
-    isGameRunning: false,
-    isSoundOn: true, // <-- Mặc định bật âm thanh
-    suggestionCount: 0,
-    suggestionLimit: 0,
-    backgroundMusicStarted: false
+    boardWidth: 7, // Số cột
+    boardHeight: 6, // Số hàng
+    pieces: [], // Mảng lưu trạng thái các ô trên bàn cờ
+    playerTurn: FIRST_TURN, // Lượt chơi hiện tại
+    hoverColumn: -1, // Cột đang được trỏ chuột
+    animating: false, // Đang có hiệu ứng rơi quân
+    isGameRunning: false, // Trạng thái game đang chạy
+    isSoundOn: true, // Âm thanh bật/tắt
+    suggestionCount: 0, // Số lần đã gợi ý
+    suggestionLimit: 0, // Số lần gợi ý tối đa
+    backgroundMusicStarted: false // Đã phát nhạc nền chưa
   };
   elements.board.classList.add("disabled");
   // Thêm hàm cập nhật nhạc nền
@@ -78,15 +80,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   // Audio Functions
+  // Hàm phát âm thanh
   function playSound(soundName, loop = false) {
     if (!gameState.isSoundOn || !sounds[soundName]) return;
     
     try {
-      // Nếu là background sound và chưa được bắt đầu, ghi nhận trạng thái
+      // Nếu là nhạc nền và chưa phát, đánh dấu đã phát
       if (soundName === "background" && !gameState.backgroundMusicStarted && loop) {
         gameState.backgroundMusicStarted = true;
       }
-      
       sounds[soundName].currentTime = 0;
       sounds[soundName].loop = loop;
       
@@ -95,17 +97,17 @@ document.addEventListener("DOMContentLoaded", () => {
       
       if (playPromise !== undefined) {
         playPromise.catch(error => {
-          console.log("Playback prevented by browser:", error);
-          // Không làm gì, âm thanh sẽ được phát khi có tương tác người dùng
+          console.log("Trình duyệt chặn phát âm thanh:", error);
         });
       }
     } catch (e) {
-      console.error('Audio play failed:', e);
+      console.error('Phát âm thanh thất bại:', e);
     }
   }
 
 
   // Event Listener Setup
+  // Thiết lập các sự kiện giao diện
   function initializeEventListeners() {
     elements.resetButton.addEventListener("click", handleReset);
     elements.boardSizeSelect.addEventListener("change", () => 
@@ -173,6 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Event Handlers
+  // Hàm xử lý khi nhấn nút chơi lại
   function handleReset() {
     elements.modalContainer.style.display = "none";
     initializeBoard();
@@ -180,6 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
     gameState.isGameRunning = true;
   }
 
+  // Hàm xử lý khi nhấn nút xem lại
   function handleReview() {
     elements.modalContainer.style.display = "none";
     elements.board.classList.add("disabled");
@@ -187,6 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
     elements.suggestButton.style.visibility = "hidden";
   }
 
+  // Hàm xử lý khi bắt đầu game
   function handleGameStart() {
     updateBackgroundMusic();
     gameState.isGameRunning = true;
@@ -198,6 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Hàm xử lý khi đóng tùy chọn
   function handleCloseOptions() {
     gameState.isGameRunning = false;
     document.getElementById("turn-notification").style.visibility = "hidden";
@@ -207,10 +213,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Board Management
+  // Quản lý bàn cờ
   function setBoardDimensions(sizeStr) {
     const [w, h] = sizeStr.split("x").map(Number);
     if (isNaN(w) || isNaN(h)) {
-      console.error("Invalid board size:", sizeStr);
+      console.error("Kích thước bàn cờ không hợp lệ:", sizeStr);
       return;
     }
     gameState.boardWidth = w;
@@ -222,6 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initializeBoard();
   }
 
+  // Khởi tạo lại bàn cờ
   function initializeBoard() {
     elements.board.innerHTML = "";
     gameState.pieces = new Array(gameState.boardWidth * gameState.boardHeight).fill(0);
@@ -247,12 +255,14 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Game Logic
+  // Lấy loại người chơi hiện tại (người/máy)
   function getCurrentPlayerType() {
     return gameState.playerTurn === FIRST_TURN
       ? elements.player1TypeSelect.value.trim().toLowerCase()
       : elements.player2TypeSelect.value.trim().toLowerCase();
   }
 
+  // Tìm hàng trống đầu tiên trong một cột
   function getAvailableRowInColumn(column) {
     for (let row = gameState.boardHeight - 1; row >= 0; row--) {
       if (gameState.pieces[row * gameState.boardWidth + column] === 0) return row;
@@ -260,6 +270,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return -1;
   }
 
+  // Xử lý khi người chơi click vào một cột
   function onColumnClicked(column) {
     playSound("drop");
     const availableRow = getAvailableRowInColumn(column);
@@ -298,11 +309,13 @@ document.addEventListener("DOMContentLoaded", () => {
     animation.addEventListener("finish", checkGameWinOrDraw);
   }
 
+  // Xử lý khi di chuột vào một cột
   function onMouseEnteredColumn(column) {
     gameState.hoverColumn = column;
     if (!gameState.animating) updateHover();
   }
 
+  // Cập nhật hiệu ứng quân chưa đặt
   function updateHover() {
     removeUnplacedPiece();
     if (gameState.hoverColumn >= 0 && gameState.pieces[gameState.hoverColumn] === 0) {
@@ -315,12 +328,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Xóa quân chưa đặt
   function removeUnplacedPiece() {
     const unplacedPiece = document.querySelector("[data-placed='false']");
     unplacedPiece?.parentElement?.removeChild(unplacedPiece);
   }
 
   // Game State Updates
+  // Kiểm tra thắng/thua/hòa và cập nhật trạng thái game
   function checkGameWinOrDraw() {
     gameState.animating = false;
 
@@ -370,6 +385,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateHover();
   }
 
+  // Cập nhật thông báo lượt chơi
   function updateTurnNotification() {
     if (!elements.turnMessage || !elements.playerIndicator) return;
     
@@ -385,6 +401,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // AI and Suggestion Logic
+  // Kiểm tra và cho máy tính đi nếu đến lượt máy
   function checkAndMakeAIMove() {
     if (getCurrentPlayerType() === "computer") {
       const difficulty = elements.computerDifficultySelect.value;
@@ -401,6 +418,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Máy đi ở mức dễ
   function makeEasyAIMove() {
     const board2D = convertPiecesTo2D();
     const moveColumn = getEasyMove(board2D, 2);
@@ -412,6 +430,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Máy đi ở mức trung bình
   function makeMediumAIMove() {
     const board2D = convertPiecesTo2D();
     const moveColumn = getMediumMove(board2D, 4);
@@ -423,6 +442,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Máy đi ở mức khó
   function makeHardAIMove() {
     const board2D = convertPiecesTo2D();
     const validMoves = getValidLocations(board2D).length;
@@ -436,6 +456,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Suggestions Feature
+  // Cập nhật hiển thị nút gợi ý
   function updateSuggestButtonVisibility() {
     const player1Type = elements.player1TypeSelect.value;
     const player2Type = elements.player2TypeSelect.value;
@@ -451,6 +472,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Gợi ý nước đi tốt nhất cho người chơi
   function suggestBestMove() {
     // Set suggestion limits based on difficulty
     const difficulty = elements.computerDifficultySelect.value;
@@ -462,7 +484,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (gameState.suggestionCount >= gameState.suggestionLimit) {
-      showSuggestionMessage("⚠️ Bạn đã sử dụng hết lượt gợi ý!");
+      showSuggestionMessage("Bạn đã sử dụng hết lượt gợi ý!");
       return;
     }
 
@@ -493,6 +515,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 2000);
   }
 
+  // Hiển thị thông báo gợi ý
   function showSuggestionMessage(message) {
     const msgBox = document.getElementById("suggestionMessage");
     msgBox.textContent = message;
@@ -504,6 +527,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Utility Functions
+  // Chuyển mảng 1 chiều sang 2 chiều
   function convertPiecesTo2D() {
     let board2D = [];
     for (let row = 0; row < gameState.boardHeight; row++) {
@@ -516,6 +540,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return board2D;
   }
 
+  // Kiểm tra người chơi có thắng chưa
   function hasPlayerWon(player) {
     const { boardWidth, boardHeight, pieces } = gameState;
     
@@ -591,7 +616,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return null;
   }
 
-  // Make the initializeBoard function available globally
+  // Xuất hàm khởi tạo bàn cờ ra global
   window.initializeBoard = initializeBoard;
 });
 
